@@ -73,89 +73,12 @@ public class LavagnaController {
         if(collezioneDiInsiemi == null)
             collezioneDiInsiemi = new ArrayList<>();
         insiemeDiPunti = new ArrayList<>();
-        colorPicker.setValue(Color.BLACK);
-        currentTool = Tool.Brush;
-        sizeBrush = 6.0;
-        scrollSize.setValue(sizeBrush);
-        currentBrushStatus.setRadius(sizeBrush/2);
-        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/pennello.png"))));
-        //Qui mi sto impostando i valori minimi e massimi della "scrollSize"
-        scrollSize.setMin(1);
-        scrollSize.setMax(65);
-        sizeBoxNumber.setText(String.valueOf((int)scrollSize.getValue()));
-        //Qui inizializzo la lavagna
-        canvas.setHeight(350);
-        canvas.setWidth(350);
 
-        gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        settings(); //Imposto diversi aspetti legati all'interfaccia.
 
-        gc.setStroke(Color.BLACK);
-        currentColorBrush = Color.BLACK;
+        settingsCanvas(); //Imposto i valori di default della lavagna.
 
-        gc.setLineWidth(sizeBrush);
-
-        gc.setLineCap(StrokeLineCap.ROUND);
-        gc.setLineJoin(StrokeLineJoin.ROUND);
-
-        canvas.setOnMousePressed(e-> {
-            switch (currentTool) {
-                case Brush -> {
-                    insiemeDiPunti = new ArrayList<>();
-                    firstX = e.getX();
-                    firstY = e.getY();
-                    Point p = new Point(firstX, firstY, firstX, firstY, sizeBrush, currentColorBrush);
-                    insiemeDiPunti.add(p);
-                    for (Point i : insiemeDiPunti) {
-                        gc.setLineWidth(i.getSize());
-                        gc.setStroke(i.getColor());
-                        gc.strokeLine(i.getFirtX(), i.getFirstY(), i.getLastX(), i.getLastY());
-                    }
-                }
-
-                case Eraser -> {
-
-                }
-
-                case Text -> {
-
-                }
-
-                case Bucket -> {
-
-                }
-            }
-        });
-
-        canvas.setOnMouseDragged(e->{
-            switch (currentTool){
-                case Brush -> {
-                    lastX = e.getX();
-                    lastY = e.getY();
-                    Point p = new Point(firstX, firstY, e.getX(), e.getY(), sizeBrush, currentColorBrush);
-                    insiemeDiPunti.add(p);
-                    firstX = lastX;
-                    firstY = lastY;
-                    for (Point i : insiemeDiPunti) {
-                        gc.setLineWidth(i.getSize());
-                        gc.setStroke(i.getColor());
-                        gc.strokeLine(i.getFirtX(), i.getFirstY(), i.getLastX(), i.getLastY());
-                    }
-                }
-            }
-        });
-
-        canvas.setOnMouseReleased(e->{
-            switch (currentTool) {
-                case Brush -> {
-                    collezioneDiInsiemi.add(insiemeDiPunti);
-                }
-                case Text -> {
-                    
-                }
-            }
-        });
+        clickOnCanvas(); //Qui è dove si decide cosa avviene al tocco della lavagna.
 
 
     }
@@ -230,17 +153,7 @@ public class LavagnaController {
     void undo(MouseEvent event) {
             if(!collezioneDiInsiemi.isEmpty()){
                 collezioneDiInsiemi.removeLast();
-                clean();
-                for(int i = 0; i < collezioneDiInsiemi.size(); i++){
-                    for(int j = 0; j < collezioneDiInsiemi.get(i).size(); j++){
-                        gc.setLineWidth(collezioneDiInsiemi.get(i).get(j).getSize());
-                        gc.setStroke(collezioneDiInsiemi.get(i).get(j).getColor());
-                        gc.strokeLine(collezioneDiInsiemi.get(i).get(j).getFirtX(),
-                                collezioneDiInsiemi.get(i).get(j).getFirstY(),
-                                collezioneDiInsiemi.get(i).get(j).getLastX(),
-                                collezioneDiInsiemi.get(i).get(j).getLastY());
-                    }
-                }
+                redrawOnCanvas();
             }
     }
 
@@ -262,6 +175,138 @@ public class LavagnaController {
 
         } catch (NumberFormatException e) {
             System.out.println("Input non valido: " + sizeBoxNumber.getText());
+        }
+    }
+
+    public void clickOnCanvas(){
+        canvas.setOnMousePressed(e-> {
+            switch (currentTool) {
+                case Brush -> {
+                    insiemeDiPunti = new ArrayList<>();
+                    firstX = e.getX();
+                    firstY = e.getY();
+                    Point p = new Point(firstX, firstY, firstX, firstY, sizeBrush, currentColorBrush);
+                    insiemeDiPunti.add(p);
+                    for (Point i : insiemeDiPunti) {
+                        gc.setLineWidth(i.getSize());
+                        gc.setStroke(i.getColor());
+                        gc.strokeLine(i.getFirstX(), i.getFirstY(), i.getLastX(), i.getLastY());
+                    }
+                }
+
+
+                case Text -> {
+
+                }
+
+                case Bucket -> {
+
+                }
+            }
+        });
+
+        canvas.setOnMouseDragged(e->{
+            switch (currentTool){
+                case Brush -> {
+                    lastX = e.getX();
+                    lastY = e.getY();
+                    Point p = new Point(firstX, firstY, e.getX(), e.getY(), sizeBrush, currentColorBrush);
+                    insiemeDiPunti.add(p);
+                    firstX = lastX;
+                    firstY = lastY;
+                    for (Point i : insiemeDiPunti) {
+                        gc.setLineWidth(i.getSize());
+                        gc.setStroke(i.getColor());
+                        gc.strokeLine(i.getFirstX(), i.getFirstY(), i.getLastX(), i.getLastY());
+                    }
+                }
+                case Eraser -> {
+                    usoGomma(e);
+                }
+            }
+        });
+
+        canvas.setOnMouseReleased(e->{
+            switch (currentTool) {
+                case Brush -> {
+                    collezioneDiInsiemi.add(insiemeDiPunti);
+                }
+                case Text -> {
+
+                }
+            }
+        });
+    }
+
+    public void settingsCanvas(){
+        canvas.setHeight(350);
+        canvas.setWidth(350);
+
+        gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setStroke(Color.BLACK);
+        currentColorBrush = Color.BLACK;
+
+        gc.setLineWidth(sizeBrush);
+
+        gc.setLineCap(StrokeLineCap.ROUND);
+        gc.setLineJoin(StrokeLineJoin.ROUND);
+    }
+
+    public void settings(){
+        colorPicker.setValue(Color.BLACK);
+        currentTool = Tool.Brush;
+        sizeBrush = 6.0;
+        scrollSize.setValue(sizeBrush);
+        currentBrushStatus.setRadius(sizeBrush/2);
+        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/pennello.png"))));
+        //Qui mi sto impostando i valori minimi e massimi della "scrollSize"
+        scrollSize.setMin(1);
+        scrollSize.setMax(65);
+        sizeBoxNumber.setText(String.valueOf((int)scrollSize.getValue()));
+    }
+
+    public void redrawOnCanvas(){
+        clean();
+        for(int i = 0; i < collezioneDiInsiemi.size(); i++){
+            for(int j = 0; j < collezioneDiInsiemi.get(i).size(); j++){
+                gc.setLineWidth(collezioneDiInsiemi.get(i).get(j).getSize());
+                gc.setStroke(collezioneDiInsiemi.get(i).get(j).getColor());
+                gc.strokeLine(collezioneDiInsiemi.get(i).get(j).getFirstX(),
+                        collezioneDiInsiemi.get(i).get(j).getFirstY(),
+                        collezioneDiInsiemi.get(i).get(j).getLastX(),
+                        collezioneDiInsiemi.get(i).get(j).getLastY());
+            }
+        }
+    }
+
+    public void usoGomma(MouseEvent e){
+        double x = e.getX();
+        double y = e.getY();
+        double t = 10.0; //valore di tolleranza
+
+        for(int i = 0; i < collezioneDiInsiemi.size(); i++){
+            for(int j = 0; j < collezioneDiInsiemi.get(i).size(); j++){
+                double X1 = collezioneDiInsiemi.get(i).get(j).getFirstX();
+                double Y1 = collezioneDiInsiemi.get(i).get(j).getFirstY();
+                double X2 = collezioneDiInsiemi.get(i).get(j).getLastX();
+                double Y2 = collezioneDiInsiemi.get(i).get(j).getLastY();
+
+                //Applicazione della tolleranza
+                X1 -= t;
+                Y1 -= t;
+                X2 += t;
+                Y2 += t;
+                if(x >= X1 && x <= X2 && y >= Y1 && y <= Y2){
+                    collezioneDiInsiemi.get(i).remove(j);
+                    System.out.println("DELETED");
+                    redrawOnCanvas();
+                    return;
+                }
+
+            }
         }
     }
 

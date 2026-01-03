@@ -18,7 +18,7 @@ public class Point {
         this.color = color;
     }
 
-    public double getFirtX(){return this.x;}
+    public double getFirstX(){return this.x;}
 
     public double getFirstY(){return this.y;}
 
