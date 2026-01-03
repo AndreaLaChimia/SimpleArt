@@ -282,33 +282,54 @@ public class LavagnaController {
         }
     }
 
-    public void usoGomma(MouseEvent e){
-        double x = e.getX();
-        double y = e.getY();
-        double t = 10.0; //valore di tolleranza
+    public void usoGomma(MouseEvent e) {
+        double gommaX = e.getX();
+        double gommaY = e.getY();
+        double tolleranza = 10.0;
 
-        for(int i = 0; i < collezioneDiInsiemi.size(); i++){
-            for(int j = 0; j < collezioneDiInsiemi.get(i).size(); j++){
-                double X1 = collezioneDiInsiemi.get(i).get(j).getFirstX();
-                double Y1 = collezioneDiInsiemi.get(i).get(j).getFirstY();
-                double X2 = collezioneDiInsiemi.get(i).get(j).getLastX();
-                double Y2 = collezioneDiInsiemi.get(i).get(j).getLastY();
+        for (int i = 0; i < collezioneDiInsiemi.size(); i++) {
+            var lista = collezioneDiInsiemi.get(i);
 
-                //Applicazione della tolleranza
-                X1 -= t;
-                Y1 -= t;
-                X2 += t;
-                Y2 += t;
-                if(x >= X1 && x <= X2 && y >= Y1 && y <= Y2){
-                    collezioneDiInsiemi.get(i).remove(j);
-                    System.out.println("DELETED");
+            for (int j = 0; j < lista.size(); j++) {
+                var s = lista.get(j);
+
+                double d = distanzaPuntoSegmento(
+                        gommaX, gommaY,
+                        s.getFirstX(), s.getFirstY(),
+                        s.getLastX(), s.getLastY()
+                );
+
+                if (d <= tolleranza) {
+                    lista.remove(j);
                     redrawOnCanvas();
                     return;
                 }
-
             }
         }
     }
+
+    private double distanzaPuntoSegmento(
+            double px, double py,
+            double x1, double y1,
+            double x2, double y2) {
+
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+
+        if (dx == 0 && dy == 0) {
+            return Math.hypot(px - x1, py - y1);
+        }
+
+        double t = ((px - x1) * dx + (py - y1) * dy) / (dx*dx + dy*dy);
+        t = Math.max(0, Math.min(1, t));
+
+        double projX = x1 + t * dx;
+        double projY = y1 + t * dy;
+
+        return Math.hypot(px - projX, py - projY);
+    }
+
+
 
 }
 
