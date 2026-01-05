@@ -101,9 +101,9 @@ public class LavagnaController {
 
     @FXML
     void binSelected(MouseEvent event) {
-        gc.setFill(currentColorBackground);
+        createSnapshot();
+        gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        collezioneDiInsiemi.clear();
     }
 
     @FXML
@@ -164,6 +164,9 @@ public class LavagnaController {
             System.out.println("Dopo undo " + collezioneDiInsiemi.size());
             redrawOnCanvas();
         }
+
+        if(collezioneDiInsiemi.isEmpty())
+            undoButton.setOpacity(0.5);
     }
 
     @FXML
@@ -190,6 +193,7 @@ public class LavagnaController {
     public void settings(){
         collezioneDiInsiemi = new ArrayList<>();
 
+        undoButton.setOpacity(0.5);
 
         colorPicker.setValue(Color.BLACK);
         currentTool = Tool.Brush;
@@ -228,8 +232,9 @@ public class LavagnaController {
     }
 
     public void clickOnCanvas(){
-        createSnapshot();
         canvas.setOnMousePressed(e-> {
+            createSnapshot();
+            print("Aggiunto un memento.");
             switch (currentTool) {
                 case Brush -> {
                     insiemeDiPunti = new ArrayList<>();
@@ -359,6 +364,7 @@ public class LavagnaController {
     public void createSnapshot(){
         originator.setState(collezioneDiInsiemi, canvas.getHeight(), canvas.getWidth(), currentColorBackground);
         careTaker.save(originator.createMemento());
+        undoButton.setOpacity(1);
     }
 }
 

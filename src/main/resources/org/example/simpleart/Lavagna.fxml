@@ -135,7 +135,7 @@
    <bottom>
       <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, #ffff99 0%, #99ff99 100%); -fx-border-color: black;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#undo" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="undoButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#undo" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../icone/undo.png" />
                </image>
