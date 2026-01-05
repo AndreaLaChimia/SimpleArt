@@ -11,17 +11,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
+import org.example.simpleart.model.CareTaker;
+import org.example.simpleart.model.Memento;
+import org.example.simpleart.model.Originator;
 import org.example.simpleart.model.Point;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static org.example.simpleart.model.Print.print;
 
 public class LavagnaController {
 
@@ -48,11 +52,11 @@ public class LavagnaController {
 
     private double firstX, firstY, lastX, lastY;
 
-    String currentColorBackground = "WHITE";
+    Color currentColorBackground = Color.WHITE;
 
     Tool currentTool;
 
-    Color currentColorBrush;
+    Color currentColor;
 
     GraphicsContext gc;
 
@@ -62,6 +66,9 @@ public class LavagnaController {
 
     Double sizeBrush;
 
+    Originator originator;
+    CareTaker careTaker;
+
     public enum Tool{
         Brush,
         Eraser,
@@ -70,11 +77,7 @@ public class LavagnaController {
     }
 
     public void initialize(){
-        if(collezioneDiInsiemi == null)
-            collezioneDiInsiemi = new ArrayList<>();
-        insiemeDiPunti = new ArrayList<>();
-
-        settings(); //Imposto diversi aspetti legati all'interfaccia.
+        settings(); //Imposto diversi aspetti legati all'interfaccia e altro.
 
         settingsCanvas(); //Imposto i valori di default della lavagna.
 
@@ -86,7 +89,7 @@ public class LavagnaController {
     public void clean(){
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        gc.setFill(Paint.valueOf(currentColorBackground));
+        gc.setFill(currentColorBackground);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
@@ -98,7 +101,7 @@ public class LavagnaController {
 
     @FXML
     void binSelected(MouseEvent event) {
-        gc.setFill(Paint.valueOf(currentColorBackground));
+        gc.setFill(currentColorBackground);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         collezioneDiInsiemi.clear();
     }
@@ -151,16 +154,22 @@ public class LavagnaController {
 
     @FXML
     void undo(MouseEvent event) {
-            if(!collezioneDiInsiemi.isEmpty()){
-                collezioneDiInsiemi.removeLast();
-                redrawOnCanvas();
-            }
+        if(!collezioneDiInsiemi.isEmpty()){
+            System.out.println("Prima dell'undo " + collezioneDiInsiemi.size());
+            originator.restore(careTaker.undo());
+            collezioneDiInsiemi = originator.getCollezioneDiInsiemi();
+            canvas.setHeight(originator.getCanvasHeight());
+            canvas.setWidth(originator.getCanvasWidth());
+            currentColorBackground = originator.getBackgroundColor();
+            System.out.println("Dopo undo " + collezioneDiInsiemi.size());
+            redrawOnCanvas();
+        }
     }
 
     @FXML
     void colorSelected(ActionEvent event) {
-        currentColorBrush = colorPicker.getValue();
-        currentBrushStatus.setFill(currentColorBrush);
+        currentColor = colorPicker.getValue();
+        currentBrushStatus.setFill(currentColor);
     }
 
     @FXML
@@ -178,14 +187,55 @@ public class LavagnaController {
         }
     }
 
+    public void settings(){
+        collezioneDiInsiemi = new ArrayList<>();
+
+
+        colorPicker.setValue(Color.BLACK);
+        currentTool = Tool.Brush;
+        sizeBrush = 6.0;
+        scrollSize.setValue(sizeBrush);
+        currentBrushStatus.setRadius(sizeBrush/2);
+        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/pennello.png"))));
+        //Qui mi sto impostando i valori minimi e massimi della "scrollSize"
+        scrollSize.setMin(1);
+        scrollSize.setMax(65);
+        sizeBoxNumber.setText(String.valueOf((int)scrollSize.getValue()));
+
+        originator = new Originator();
+        careTaker = new CareTaker();
+
+        originator.setState(collezioneDiInsiemi, 350, 350, currentColorBackground);
+        careTaker.save(originator.createMemento());
+    }
+
+    public void settingsCanvas(){
+        canvas.setHeight(350);
+        canvas.setWidth(350);
+
+        gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setStroke(Color.BLACK);
+        currentColor = Color.BLACK;
+
+        gc.setLineWidth(sizeBrush);
+
+        gc.setLineCap(StrokeLineCap.ROUND);
+        gc.setLineJoin(StrokeLineJoin.ROUND);
+
+    }
+
     public void clickOnCanvas(){
+        createSnapshot();
         canvas.setOnMousePressed(e-> {
             switch (currentTool) {
                 case Brush -> {
                     insiemeDiPunti = new ArrayList<>();
                     firstX = e.getX();
                     firstY = e.getY();
-                    Point p = new Point(firstX, firstY, firstX, firstY, sizeBrush, currentColorBrush);
+                    Point p = new Point(firstX, firstY, firstX, firstY, sizeBrush, currentColor);
                     insiemeDiPunti.add(p);
                     for (Point i : insiemeDiPunti) {
                         gc.setLineWidth(i.getSize());
@@ -200,7 +250,9 @@ public class LavagnaController {
                 }
 
                 case Bucket -> {
-
+                    gc.setFill(currentColor);
+                    currentColorBackground = currentColor;
+                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 }
             }
         });
@@ -210,7 +262,7 @@ public class LavagnaController {
                 case Brush -> {
                     lastX = e.getX();
                     lastY = e.getY();
-                    Point p = new Point(firstX, firstY, e.getX(), e.getY(), sizeBrush, currentColorBrush);
+                    Point p = new Point(firstX, firstY, e.getX(), e.getY(), sizeBrush, currentColor);
                     insiemeDiPunti.add(p);
                     firstX = lastX;
                     firstY = lastY;
@@ -238,38 +290,12 @@ public class LavagnaController {
         });
     }
 
-    public void settingsCanvas(){
-        canvas.setHeight(350);
-        canvas.setWidth(350);
 
-        gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        gc.setStroke(Color.BLACK);
-        currentColorBrush = Color.BLACK;
-
-        gc.setLineWidth(sizeBrush);
-
-        gc.setLineCap(StrokeLineCap.ROUND);
-        gc.setLineJoin(StrokeLineJoin.ROUND);
-    }
-
-    public void settings(){
-        colorPicker.setValue(Color.BLACK);
-        currentTool = Tool.Brush;
-        sizeBrush = 6.0;
-        scrollSize.setValue(sizeBrush);
-        currentBrushStatus.setRadius(sizeBrush/2);
-        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/pennello.png"))));
-        //Qui mi sto impostando i valori minimi e massimi della "scrollSize"
-        scrollSize.setMin(1);
-        scrollSize.setMax(65);
-        sizeBoxNumber.setText(String.valueOf((int)scrollSize.getValue()));
-    }
 
     public void redrawOnCanvas(){
         clean();
+        gc.setFill(originator.getBackgroundColor());
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(int i = 0; i < collezioneDiInsiemi.size(); i++){
             for(int j = 0; j < collezioneDiInsiemi.get(i).size(); j++){
                 gc.setLineWidth(collezioneDiInsiemi.get(i).get(j).getSize());
@@ -280,6 +306,7 @@ public class LavagnaController {
                         collezioneDiInsiemi.get(i).get(j).getLastY());
             }
         }
+        print("Tutto ridisegnato.");
     }
 
     public void usoGomma(MouseEvent e) {
@@ -329,7 +356,9 @@ public class LavagnaController {
         return Math.hypot(px - projX, py - projY);
     }
 
-
-
+    public void createSnapshot(){
+        originator.setState(collezioneDiInsiemi, canvas.getHeight(), canvas.getWidth(), currentColorBackground);
+        careTaker.save(originator.createMemento());
+    }
 }
 
