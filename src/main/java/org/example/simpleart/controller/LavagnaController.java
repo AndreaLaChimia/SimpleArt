@@ -104,6 +104,8 @@ public class LavagnaController {
         createSnapshot();
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        currentColorBackground = Color.WHITE;
+        collezioneDiInsiemi.clear();
     }
 
     @FXML
@@ -154,7 +156,7 @@ public class LavagnaController {
 
     @FXML
     void undo(MouseEvent event) {
-        if(!collezioneDiInsiemi.isEmpty()){
+        if(careTaker.hasUndo()){
             System.out.println("Prima dell'undo " + collezioneDiInsiemi.size());
             originator.restore(careTaker.undo());
             collezioneDiInsiemi = originator.getCollezioneDiInsiemi();
@@ -165,7 +167,7 @@ public class LavagnaController {
             redrawOnCanvas();
         }
 
-        if(collezioneDiInsiemi.isEmpty())
+        if(!careTaker.hasUndo())
             undoButton.setOpacity(0.5);
     }
 
@@ -248,16 +250,14 @@ public class LavagnaController {
                         gc.strokeLine(i.getFirstX(), i.getFirstY(), i.getLastX(), i.getLastY());
                     }
                 }
-
-
-                case Text -> {
-
+                case Eraser -> {
+                    usoGomma(e);
                 }
-
                 case Bucket -> {
                     gc.setFill(currentColor);
                     currentColorBackground = currentColor;
                     gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                    redrawOnCanvas();
                 }
             }
         });
@@ -299,7 +299,7 @@ public class LavagnaController {
 
     public void redrawOnCanvas(){
         clean();
-        gc.setFill(originator.getBackgroundColor());
+        gc.setFill(currentColorBackground);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(int i = 0; i < collezioneDiInsiemi.size(); i++){
             for(int j = 0; j < collezioneDiInsiemi.get(i).size(); j++){
@@ -340,10 +340,7 @@ public class LavagnaController {
         }
     }
 
-    private double distanzaPuntoSegmento(
-            double px, double py,
-            double x1, double y1,
-            double x2, double y2) {
+    private double distanzaPuntoSegmento(double px, double py, double x1, double y1, double x2, double y2) {
 
         double dx = x2 - x1;
         double dy = y2 - y1;
