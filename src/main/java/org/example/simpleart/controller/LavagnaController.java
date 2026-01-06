@@ -12,17 +12,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Circle;
 import javafx.embed.swing.SwingFXUtils;
-
+import javafx.scene.layout.StackPane;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.example.simpleart.model.CareTaker;
-import org.example.simpleart.model.Memento;
 import org.example.simpleart.model.Originator;
 import org.example.simpleart.model.Point;
 
@@ -74,9 +71,17 @@ public class LavagnaController {
 
     ArrayList<ArrayList<Point>> collezioneDiInsiemi;
 
+    @FXML
+    StackPane pane;
+
     Double sizeBrush;
 
+    Boolean piazzatoPuntoA = false;
+
     double tolleranza = 10.0; //La tolleranza è in pratica la punta della gomma.
+
+    double tempX;
+    double tempY;
 
     Originator originator;
     CareTaker careTaker;
@@ -86,7 +91,8 @@ public class LavagnaController {
         Brush,
         Eraser,
         Bucket,
-        Text
+        Text,
+        Line;
     }
 
     public void initialize(){
@@ -191,8 +197,8 @@ public class LavagnaController {
     }
 
     @FXML
-    void newLevelSelected(MouseEvent event) {
-
+    void makeLine(MouseEvent event) {
+        currentTool = Tool.Line;
     }
 
     @FXML
@@ -228,13 +234,13 @@ public class LavagnaController {
     @FXML
     void undo(MouseEvent event) {
         if(careTaker.hasUndo()){
-            System.out.println("Prima dell'undo " + collezioneDiInsiemi.size());
+            System.out.println("Prima dell'undo " + careTaker.hasUndo());
             originator.restore(careTaker.undo());
             collezioneDiInsiemi = originator.getCollezioneDiInsiemi();
             canvas.setHeight(originator.getCanvasHeight());
             canvas.setWidth(originator.getCanvasWidth());
             currentColorBackground = originator.getBackgroundColor();
-            System.out.println("Dopo undo " + collezioneDiInsiemi.size());
+            System.out.println("Dopo undo " + careTaker.hasUndo());
             redrawOnCanvas();
         }
 
@@ -267,13 +273,15 @@ public class LavagnaController {
         originator = new Originator();
         careTaker = new CareTaker();
 
-        originator.setState(collezioneDiInsiemi, 350, 350, currentColorBackground);
-        careTaker.save(originator.createMemento());
+        /*originator.setState(collezioneDiInsiemi, 350, 350, currentColorBackground);
+        careTaker.save(originator.createMemento());*/
     }
 
     public void settingsCanvas(){
         canvas.setHeight(350);
         canvas.setWidth(350);
+        altezzaBox.setText(String.valueOf((int)canvas.getHeight()));
+        larghezzaBox.setText(String.valueOf((int)canvas.getWidth()));
 
         gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.WHITE);
@@ -314,6 +322,30 @@ public class LavagnaController {
                     currentColorBackground = currentColor;
                     gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     redrawOnCanvas();
+                }
+                case Line ->{
+                    if(!piazzatoPuntoA) {
+                        careTaker.undo();
+                        tempX = e.getX();
+                        tempY = e.getY();
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(sizeBrush);
+                        print(sizeBrush.toString());
+                        gc.strokeLine(tempX, tempY, tempX, tempY);
+                        piazzatoPuntoA = true;
+                    }
+                    else {
+                        insiemeDiPunti = new ArrayList<>();
+                        gc.setStroke(currentColor);
+                        gc.setLineWidth(sizeBrush);
+                        gc.strokeLine(tempX, tempY, e.getX(), e.getY());
+                        Point p = new Point(tempX, tempY, e.getX(), e.getY(), sizeBrush, currentColor);
+                        insiemeDiPunti.add(p);
+                        collezioneDiInsiemi.add(insiemeDiPunti);
+
+                        piazzatoPuntoA = false;
+                    }
+
                 }
             }
         });
@@ -370,11 +402,26 @@ public class LavagnaController {
 
     @FXML
     void setCanvasWidthAndHeight(ActionEvent event) {
-        int largezzaTemp = Integer.parseInt(larghezzaBox.getText());
-        canvas.setWidth(largezzaTemp);
-        int altezzaTemp = Integer.parseInt(altezzaBox.getText());
-        canvas.setHeight(altezzaTemp);
-        System.out.println("Chiamata effettuata.");
+        try{
+            double newWidth  = Double.parseDouble(larghezzaBox.getText());
+            double newHeight = Double.parseDouble(altezzaBox.getText());
+
+            createSnapshot();
+
+            pane.setPrefWidth(newWidth);
+            pane.setPrefHeight(newHeight);
+
+            canvas.setWidth(newWidth);
+            canvas.setHeight(newHeight);
+
+            redrawOnCanvas();
+        } catch (NumberFormatException e) {
+            print("Inserisci dei numeri validi in entrambi i box numerici.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Inserisci dei valori validi in px per le dimensioni della tela.");
+            alert.showAndWait();
+        }
+
     }
 
     public void usoGomma(MouseEvent e) {
