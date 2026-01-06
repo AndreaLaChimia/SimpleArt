@@ -3,6 +3,7 @@ module org.example.simpleart {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
+    requires javafx.swing;
 
 
     opens org.example.simpleart to javafx.fxml;

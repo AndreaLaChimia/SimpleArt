@@ -4,30 +4,40 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Circle;
+import javafx.embed.swing.SwingFXUtils;
+
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.example.simpleart.model.CareTaker;
 import org.example.simpleart.model.Memento;
 import org.example.simpleart.model.Originator;
 import org.example.simpleart.model.Point;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.example.simpleart.model.Print.print;
 
 public class LavagnaController {
+    @FXML
+    private BorderPane borderPanePrincipale;
 
     @FXML
     private ImageView bidone, currentToolImg, gomma, livello, pennello, profiloButton, secchiello, testo, undoButton;
@@ -48,7 +58,7 @@ public class LavagnaController {
     private ColorPicker colorPicker;
 
     @FXML
-    private TextField sizeBoxNumber;
+    private TextField sizeBoxNumber, nameImgField, altezzaBox, larghezzaBox;
 
     private double firstX, firstY, lastX, lastY;
 
@@ -66,8 +76,11 @@ public class LavagnaController {
 
     Double sizeBrush;
 
+    double tolleranza = 10.0; //La tolleranza è in pratica la punta della gomma.
+
     Originator originator;
     CareTaker careTaker;
+    String nomeOpera = null;
 
     public enum Tool{
         Brush,
@@ -112,6 +125,10 @@ public class LavagnaController {
     void brushSelected(MouseEvent event) {
         currentTool = Tool.Brush;
         currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/pennello.png"))));
+        currentBrushStatus.setFill(currentColor);
+        scrollSize.setValue((int) sizeBrush.longValue());
+        currentBrushStatus.setRadius(scrollSize.getValue()/2);
+        sizeBoxNumber.setText(String.valueOf((int)sizeBrush.longValue()));
     }
 
     @FXML
@@ -122,16 +139,45 @@ public class LavagnaController {
 
     @FXML
     void changeSize(MouseEvent event) {
-        gc.setLineWidth(scrollSize.getValue());
+        switch (currentTool){
+            case Tool.Brush -> {
+                gc.setLineWidth(scrollSize.getValue());
+                sizeBrush = scrollSize.getValue();
+
+            }
+            case Tool.Eraser -> {
+                tolleranza = scrollSize.getValue();
+            }
+
+        }
         currentBrushStatus.setRadius(scrollSize.getValue()/2);
-        sizeBrush = scrollSize.getValue();
         sizeBoxNumber.setText(String.valueOf((int)scrollSize.getValue()));
+
+    }
+
+    @FXML
+    void insertedNumber(ActionEvent event) {
+        try {
+            double value = Double.parseDouble(sizeBoxNumber.getText());
+
+            value = Math.max(1, Math.min(value, 65));
+            sizeBrush = value;
+
+            currentBrushStatus.setRadius(sizeBrush / 2);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Input non valido: " + sizeBoxNumber.getText());
+        }
     }
 
     @FXML
     void eraserSelected(MouseEvent event) {
         currentTool = Tool.Eraser;
         currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gomma.png"))));
+        scrollSize.setValue(tolleranza);
+        currentBrushStatus.setFill(Color.GRAY);
+        currentBrushStatus.setRadius(tolleranza/2);
+        sizeBoxNumber.setText(String.valueOf((int)tolleranza));
     }
 
     @FXML
@@ -151,7 +197,32 @@ public class LavagnaController {
 
     @FXML
     void postInGallery(ActionEvent event) {
+        WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        canvas.snapshot(null, writableImage);
 
+    }
+
+    @FXML
+    void download(MouseEvent event) throws IOException {
+        nomeOpera = nameImgField.getText();
+        if(nomeOpera != null && !nomeOpera.isEmpty()) {
+            DirectoryChooser dc = new DirectoryChooser();
+            dc.setTitle("Sfoglia");
+            String url = dc.showDialog(null).getAbsolutePath();
+
+            WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+            canvas.snapshot(null, writableImage);
+
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+            File outputFile = new File(url + "\\" + nomeOpera + ".png");
+            ImageIO.write(bufferedImage, "png", outputFile);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("SimpleArt-Warning");
+            alert.setHeaderText("Attenzione, non hai inserito il titolo alla tua opera.");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -175,21 +246,6 @@ public class LavagnaController {
     void colorSelected(ActionEvent event) {
         currentColor = colorPicker.getValue();
         currentBrushStatus.setFill(currentColor);
-    }
-
-    @FXML
-    void insertedNumber(ActionEvent event) {
-        try {
-            double value = Double.parseDouble(sizeBoxNumber.getText());
-
-            value = Math.max(1, Math.min(value, 65));
-            sizeBrush = value;
-
-            currentBrushStatus.setRadius(sizeBrush / 2);
-
-        } catch (NumberFormatException e) {
-            System.out.println("Input non valido: " + sizeBoxNumber.getText());
-        }
     }
 
     public void settings(){
@@ -295,8 +351,6 @@ public class LavagnaController {
         });
     }
 
-
-
     public void redrawOnCanvas(){
         clean();
         gc.setFill(currentColorBackground);
@@ -314,10 +368,18 @@ public class LavagnaController {
         print("Tutto ridisegnato.");
     }
 
+    @FXML
+    void setCanvasWidthAndHeight(ActionEvent event) {
+        int largezzaTemp = Integer.parseInt(larghezzaBox.getText());
+        canvas.setWidth(largezzaTemp);
+        int altezzaTemp = Integer.parseInt(altezzaBox.getText());
+        canvas.setHeight(altezzaTemp);
+        System.out.println("Chiamata effettuata.");
+    }
+
     public void usoGomma(MouseEvent e) {
         double gommaX = e.getX();
         double gommaY = e.getY();
-        double tolleranza = 10.0;
 
         for (int i = 0; i < collezioneDiInsiemi.size(); i++) {
             var lista = collezioneDiInsiemi.get(i);
