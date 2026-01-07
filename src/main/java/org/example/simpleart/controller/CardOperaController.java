@@ -15,7 +15,7 @@ import static org.example.simpleart.model.Print.print;
 public class CardOperaController{
 
     @FXML
-    private ImageView autoreFoto, imgLike;
+    private ImageView autoreFoto, imgLike, fotoCard, cuoreIcona;
 
     @FXML
     private Label autoreStringa, titoloOpera;
@@ -23,10 +23,8 @@ public class CardOperaController{
     @FXML
     private Button bottoneLike;
 
-    @FXML
-    private ImageView fotoCard;
-
     boolean miPiaceMesso = false;
+    boolean cuorePieno = false;
 
     public void initialize(){
     }
@@ -49,5 +47,23 @@ public class CardOperaController{
             imgLike.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Like empty.png")).toExternalForm()));
             bottoneLike.setText(String.valueOf(Integer.parseInt(bottoneLike.getText()) - 1));
         }
+    }
+
+    public void cliccatoNome(MouseEvent e){
+        print("Hai cliccato il nome dell'utente " + autoreStringa.getText());
+    }
+
+    public void cliccatoCuore(MouseEvent e){
+        print("Hai cliccato il cuore");
+        if(cuorePieno){
+            cuoreIcona.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart empty.png")).toExternalForm()));
+            cuorePieno = false;
+        }
+        else{
+            cuoreIcona.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart full.png")).toExternalForm()));
+            cuorePieno = true;
+        }
+
+
     }
 }

@@ -7,12 +7,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import org.example.simpleart.model.SceneHandler;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class RegistratiController {
+
+    @FXML
+    private BorderPane root;
 
     @FXML
     private TextField cognomeField;
@@ -51,7 +55,7 @@ public class RegistratiController {
     }
 
     public void login() throws IOException {
-        SceneHandler.getInstance().sceneLoader("LoginPage.fxml");
+        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 }
 

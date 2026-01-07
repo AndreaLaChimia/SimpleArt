@@ -20,7 +20,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPanePrincipale" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.LavagnaController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.LavagnaController">
    <left>
       <GridPane prefHeight="286.0" prefWidth="138.0" style="-fx-background-color: linear-gradient(to bottom, #ffff99 0%, #99ff99 100%);; -fx-border-color: black;" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -155,26 +155,66 @@
       </GridPane>
    </right>
    <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="61.0" prefWidth="588.0" spacing="20.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="homeButton" onMouseClicked="#goToHome" mnemonicParsing="false" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Home">
+            <Button fx:id="homeButton" lineSpacing="20.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#goToHome" style="-fx-background-color: null;" text="Home  ">
                <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <ImageView fx:id="profiloButton" fitHeight="56.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../icone/user.png" />
-               </image>
-            </ImageView>
+                  <Font name="Arial" size="13.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="homeImgButton" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#goToHome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/house.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Button>
+            <TextField fx:id="barraDiRicerca" onAction="#cercaArtista" prefHeight="26.0" prefWidth="222.0" promptText="Cerca artista 🔍" style="-fx-background-radius: 50; -fx-border-color: black; -fx-border-radius: 60;" />
+            <Label fx:id="userButton" lineSpacing="20.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#goToProfile" style="-fx-background-radius: 60;" text="Profilo">
+               <font>
+                  <Font name="Arial" size="13.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="profilePic" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/painter.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Label>
+            <Button fx:id="exitButton" lineSpacing="20.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#logOut" style="-fx-background-color: null;" text="Esci">
+               <font>
+                  <Font name="Arial" size="13.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="doorImgButton" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/door.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Button>
          </children>
          <BorderPane.margin>
-            <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-         </BorderPane.margin></HBox>
+            <Insets bottom="20.0" />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding></HBox>
    </top>
    <bottom>
       <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, #ffff99 0%, #99ff99 100%); -fx-border-color: black;">
          <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="25.0" left="10.0" right="10.0" top="10.0" />
          </BorderPane.margin>
          <children>
             <ImageView fx:id="undoButton" fitHeight="44.0" fitWidth="42.0" onMouseClicked="#undo" pickOnBounds="true" preserveRatio="true">

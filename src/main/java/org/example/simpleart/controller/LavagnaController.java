@@ -35,7 +35,7 @@ import static org.example.simpleart.model.Print.print;
 
 public class LavagnaController {
     @FXML
-    private BorderPane borderPanePrincipale;
+    private BorderPane root;
 
     @FXML
     private ImageView bidone, currentToolImg, gomma, livello, pennello, profiloButton, secchiello, testo, undoButton;
@@ -47,7 +47,7 @@ public class LavagnaController {
     private Circle currentBrushStatus;
 
     @FXML
-    private Button homeButton, pubblicaButton;
+    private Button homeButton, pubblicaButton, exitButton;
 
     @FXML
     private Slider scrollSize;
@@ -56,7 +56,7 @@ public class LavagnaController {
     private ColorPicker colorPicker;
 
     @FXML
-    private TextField sizeBoxNumber, nameImgField, altezzaBox, larghezzaBox;
+    private TextField sizeBoxNumber, nameImgField, altezzaBox, larghezzaBox, barraDiRicerca;
 
     private double firstX, firstY, lastX, lastY;
 
@@ -192,12 +192,17 @@ public class LavagnaController {
 
     @FXML
     void goToHome(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Homepage.fxml");
+        SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
-    void goToProfile(MouseEvent event) {
+    public void cercaArtista(ActionEvent event) {
+        print("Hai provato a cercare il profilo di " + barraDiRicerca.getText());
+    }
 
+    @FXML
+    void goToProfile(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -477,6 +482,11 @@ public class LavagnaController {
         originator.setState(collezioneDiInsiemi, canvas.getHeight(), canvas.getWidth(), currentColorBackground);
         careTaker.save(originator.createMemento());
         undoButton.setOpacity(1);
+    }
+
+    @FXML
+    public void logOut(MouseEvent e){
+        print("Tentativo di logout.");
     }
 }
 

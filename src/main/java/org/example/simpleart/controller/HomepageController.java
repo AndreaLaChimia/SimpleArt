@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import org.example.simpleart.model.Opera;
 import org.example.simpleart.model.Print;
@@ -33,6 +34,8 @@ public class HomepageController{
     private HBox galleria;
     @FXML
     private TextField barraDiRicerca;
+    @FXML
+    private BorderPane root;
 
 
 
@@ -61,7 +64,7 @@ public class HomepageController{
 
     @FXML
     void canvasClicked(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Lavagna.fxml");
+        SceneHandler.getInstance().sceneLoader("Lavagna.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -70,8 +73,8 @@ public class HomepageController{
     }
 
     @FXML
-    void userClicked(MouseEvent event) {
-        print("Hai cliccato User ma non è successo niente.");
+    void userClicked(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getScene().getWidth(), root.getHeight());
     }
 
     @FXML
@@ -95,5 +98,9 @@ public class HomepageController{
         }
     }
 
+    @FXML
+    public void logOut(MouseEvent e){
+        print("Tentativo di logout.");
+    }
 
 }

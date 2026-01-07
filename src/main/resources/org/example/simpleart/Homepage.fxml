@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.HomepageController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.HomepageController">
    <center>
       <GridPane prefHeight="308.0" prefWidth="501.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -32,7 +32,7 @@
                   <Insets bottom="30.0" />
                </GridPane.margin>
             </Label>
-            <HBox fx:id="galleria" prefHeight="180.0" prefWidth="600.0" spacing="20.0" GridPane.rowIndex="1">
+            <HBox fx:id="galleria" alignment="CENTER" prefHeight="180.0" prefWidth="600.0" spacing="20.0" GridPane.rowIndex="1">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding></HBox>
@@ -47,7 +47,7 @@
          <children>
             <Label fx:id="canvasButton" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#canvasClicked" style="-fx-background-radius: 60;" text="Lavagna">
                <font>
-                  <Font name="Bookshelf Symbol 7" size="19.0" />
+                  <Font name="Arial" size="13.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -63,7 +63,7 @@
             <TextField fx:id="barraDiRicerca" onAction="#cercaArtista" prefHeight="26.0" prefWidth="222.0" promptText="Cerca artista 🔍" style="-fx-background-radius: 50; -fx-border-color: black; -fx-border-radius: 60;" />
             <Label fx:id="userButton" lineSpacing="20.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#userClicked" style="-fx-background-radius: 60;" text="Profilo">
                <font>
-                  <Font name="Bookshelf Symbol 7" size="19.0" />
+                  <Font name="Arial" size="13.0" />
                </font>
                <graphic>
                   <ImageView fx:id="profiloButton" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -76,6 +76,21 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </Label>
+            <Button fx:id="exitButton" lineSpacing="20.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#logOut" style="-fx-background-color: null;" text="Esci">
+               <font>
+                  <Font name="Arial" size="13.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="doorImgButton" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/door.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" />
@@ -101,6 +116,9 @@
                </HBox.margin>
             </Button>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="15.0" />
+         </BorderPane.margin>
       </HBox>
    </bottom>
 </BorderPane>

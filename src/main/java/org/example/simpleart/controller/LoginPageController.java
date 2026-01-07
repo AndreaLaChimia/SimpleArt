@@ -9,12 +9,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import org.example.simpleart.model.SceneHandler;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class LoginPageController{
+
+    @FXML
+    private BorderPane root;
 
     @FXML
     private Label RegistratiButton;
@@ -43,12 +47,12 @@ public class LoginPageController{
 
     @FXML
     void login(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Homepage.fxml");
+        SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
     void registrati(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Registrati.fxml");
+        SceneHandler.getInstance().sceneLoader("Registrati.fxml", root.getWidth(), root.getHeight());
     }
 
 }

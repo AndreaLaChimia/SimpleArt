@@ -21,13 +21,13 @@
 
    <!-- Footer -->
    <HBox alignment="CENTER_LEFT" spacing="10">
-      <ImageView fx:id="autoreFoto" fitHeight="30.0" fitWidth="30.0" preserveRatio="true">
+      <ImageView fx:id="autoreFoto" onMouseClicked="#cliccatoNome" fitHeight="30.0" fitWidth="30.0" preserveRatio="true">
          <image>
             <Image url="@../../../icone/user.png" />
          </image>
       </ImageView>
 
-      <Label fx:id="autoreStringa" text="Autore" wrapText="true">
+      <Label fx:id="autoreStringa" onMouseClicked="#cliccatoNome" text="Autore" wrapText="true">
          <font>
             <Font size="14.0" />
          </font></Label>
@@ -47,7 +47,7 @@
                <Font size="14.0" />
             </font>
          </Button>
-         <Button fx:id="nelCuore" onMouseClicked="#cliccatoMiPiace" style="-fx-background-color: white;" text="Nel cuore">
+         <Button fx:id="nelCuore" onMouseClicked="#cliccatoCuore" style="-fx-background-color: white;" text="Nel cuore">
             <graphic>
                <ImageView fx:id="cuoreIcona" fitWidth="16" preserveRatio="true">
                   <image>

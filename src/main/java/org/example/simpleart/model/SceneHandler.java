@@ -18,10 +18,10 @@ public class SceneHandler {
         return sceneHandler;
     }
 
-    public void sceneLoader(String url) throws IOException {
+    public void sceneLoader(String url, double larghezzaScene, double altezzaScene) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/simpleart/" + url));
         Parent root = loader.load();
-        Scene scene = new Scene(root, 900, 600);
+        Scene scene = new Scene(root, larghezzaScene, altezzaScene);
         stage.setScene(scene);
         stage.show();
 
