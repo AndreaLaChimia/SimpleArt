@@ -43,7 +43,7 @@ public class LoginPageController{
 
     @FXML
     void login(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Lavagna.fxml");
+        SceneHandler.getInstance().sceneLoader("Homepage.fxml");
     }
 
     @FXML

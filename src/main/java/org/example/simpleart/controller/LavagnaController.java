@@ -22,6 +22,7 @@ import javafx.stage.DirectoryChooser;
 import org.example.simpleart.model.CareTaker;
 import org.example.simpleart.model.Originator;
 import org.example.simpleart.model.Point;
+import org.example.simpleart.model.SceneHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -72,7 +73,7 @@ public class LavagnaController {
     ArrayList<ArrayList<Point>> collezioneDiInsiemi;
 
     @FXML
-    StackPane pane;
+    StackPane stackPane;
 
     Double sizeBrush;
 
@@ -96,6 +97,8 @@ public class LavagnaController {
     }
 
     public void initialize(){
+
+        SceneHandler.getInstance().getStage().setTitle("SimpleArt - Canvas");
         settings(); //Imposto diversi aspetti legati all'interfaccia e altro.
 
         settingsCanvas(); //Imposto i valori di default della lavagna.
@@ -111,6 +114,7 @@ public class LavagnaController {
         gc.setFill(currentColorBackground);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
+
 
     @FXML
     void addTextSelected(MouseEvent event) {
@@ -146,7 +150,7 @@ public class LavagnaController {
     @FXML
     void changeSize(MouseEvent event) {
         switch (currentTool){
-            case Tool.Brush -> {
+            case Tool.Brush, Tool.Line -> {
                 gc.setLineWidth(scrollSize.getValue());
                 sizeBrush = scrollSize.getValue();
 
@@ -187,8 +191,8 @@ public class LavagnaController {
     }
 
     @FXML
-    void goToHome(ActionEvent event) {
-
+    void goToHome(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("Homepage.fxml");
     }
 
     @FXML
@@ -199,6 +203,7 @@ public class LavagnaController {
     @FXML
     void makeLine(MouseEvent event) {
         currentTool = Tool.Line;
+        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/aToB.png"))));
     }
 
     @FXML
@@ -255,6 +260,7 @@ public class LavagnaController {
     }
 
     public void settings(){
+        SceneHandler.getInstance().getStage().setTitle("SimpleArt - Canvas");
         collezioneDiInsiemi = new ArrayList<>();
 
         undoButton.setOpacity(0.5);
@@ -408,8 +414,8 @@ public class LavagnaController {
 
             createSnapshot();
 
-            pane.setPrefWidth(newWidth);
-            pane.setPrefHeight(newHeight);
+            stackPane.setPrefWidth(newWidth);
+            stackPane.setPrefHeight(newHeight);
 
             canvas.setWidth(newWidth);
             canvas.setHeight(newHeight);

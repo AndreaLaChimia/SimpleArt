@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
@@ -110,20 +112,39 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ColorPicker fx:id="colorPicker" onAction="#colorSelected" GridPane.rowIndex="1" />
+                  <ColorPicker fx:id="colorPicker" onAction="#colorSelected" promptText="Colori" style="-fx-background-color: rgb(137, 204, 240); -fx-background-radius: 50;" GridPane.rowIndex="1">
+                     <value>
+                        <Color />
+                     </value></ColorPicker>
                </children>
             </GridPane>
             <ImageView fx:id="currentToolImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <Label text="Px" GridPane.rowIndex="3">
-               <graphic>
-                  <TextField fx:id="altezzaBox" onAction="#setCanvasWidthAndHeight" prefHeight="26.0" prefWidth="70.0" promptText="Altezza" />
-               </graphic>
-            </Label>
-            <Label text="Px" GridPane.rowIndex="4">
-               <graphic>
-                  <TextField fx:id="larghezzaBox" onAction="#setCanvasWidthAndHeight" prefHeight="26.0" prefWidth="70.0" promptText="Larghezza" />
-               </graphic>
-            </Label>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+               <children>
+                  <Label alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" text="Altezza">
+                     <font>
+                        <Font name="Berlin Sans FB" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="altezzaBox" onAction="#setCanvasWidthAndHeight" prefHeight="26.0" prefWidth="68.0" promptText="Altezza" />
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
+               <children>
+                  <Label text="Larghezza">
+                     <font>
+                        <Font name="Berlin Sans FB" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="larghezzaBox" onAction="#setCanvasWidthAndHeight" prefHeight="26.0" prefWidth="86.0" promptText="Larghezza" />
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </VBox>
          </children>
          <BorderPane.margin>
             <Insets left="5.0" right="10.0" />
@@ -136,7 +157,7 @@
    <top>
       <HBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="homeButton" mnemonicParsing="false" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Home">
+            <Button fx:id="homeButton" onMouseClicked="#goToHome" mnemonicParsing="false" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Home">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>
@@ -182,8 +203,8 @@
       </HBox>
    </bottom>
    <center>
-       <StackPane fx:id="pane">
-      <Canvas fx:id="canvas" height="260.0" width="300.0" BorderPane.alignment="CENTER" />
+       <StackPane fx:id="stackPane">
+           <Canvas fx:id="canvas" height="260.0" width="300.0" BorderPane.alignment="CENTER" />
        </StackPane>
    </center>
 </BorderPane>

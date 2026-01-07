@@ -45,6 +45,7 @@ public class RegistratiController {
     private Button registratiButton;
 
     public void initialize(){
+        SceneHandler.getInstance().getStage().setTitle("SimpleArt - Registrati");
         logo.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/SimpleArt logo.png"))));
         errorLabel.setVisible(false);
     }

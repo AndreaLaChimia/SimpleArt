@@ -30,4 +30,6 @@ public class SceneHandler {
     public static void init(Stage stage){
         SceneHandler.stage = stage;
     }
+
+    public Stage getStage(){return this.stage;}
 }
