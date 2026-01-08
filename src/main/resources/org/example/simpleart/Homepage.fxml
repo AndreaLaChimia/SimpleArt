@@ -7,38 +7,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.HomepageController">
-   <center>
-      <GridPane prefHeight="308.0" prefWidth="501.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="126.60000457763672" minHeight="10.0" prefHeight="46.20000610351562" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="218.59998931884766" minHeight="10.0" prefHeight="184.59999389648436" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label prefHeight="16.0" prefWidth="391.0" text="Cosa c'è di nuovo oggi? 🎨" textFill="WHITE" GridPane.valignment="TOP">
-               <font>
-                  <Font name="Forte" size="35.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets bottom="30.0" />
-               </GridPane.margin>
-            </Label>
-            <HBox fx:id="galleria" alignment="CENTER" prefHeight="180.0" prefWidth="600.0" spacing="20.0" GridPane.rowIndex="1">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding></HBox>
-         </children>
-      </GridPane>
-   </center>
    <padding>
       <Insets bottom="5.0" />
    </padding>
@@ -121,4 +94,28 @@
          </BorderPane.margin>
       </HBox>
    </bottom>
+   <center>
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="stringaCiao" alignment="CENTER" prefHeight="16.0" prefWidth="391.0" text="Ciao" textFill="WHITE">
+               <font>
+                  <Font name="Forte" size="35.0" />
+               </font>
+            </Label>
+            <Label text="Ecco qualcosa di nuovo per te! 🎨" textFill="WHITE">
+               <font>
+                  <Font name="Forte" size="26.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <HBox fx:id="galleria" alignment="CENTER" prefHeight="180.0" prefWidth="600.0" spacing="20.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>

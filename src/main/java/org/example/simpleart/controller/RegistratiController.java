@@ -1,16 +1,17 @@
 package org.example.simpleart.controller;
 
+import org.example.simpleart.model.currentUser;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.example.simpleart.model.SceneHandler;
+
 
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.sql.SQLException;
 
 import static org.example.simpleart.model.Print.print;
 import static org.example.simpleart.model.regularExpression.*;
@@ -49,14 +50,14 @@ public class RegistratiController {
     }
 
     @FXML
-    public void registrati(){
+    public void registrati() throws SQLException, IOException {
         print("Tasto registrati premuto.");
         textFieldRule.setVisible(false);
         errorLabel.setVisible(false);
         String nome = nameField.getText();
         String cognome = surnameField.getText();
         String nickname = nicknameField.getText();
-        String email = emailField.getText();
+        String email = emailField.getText().toLowerCase();
         String password = passwordField.getText();
         String password2 = passwordField2.getText();
 
@@ -95,10 +96,16 @@ public class RegistratiController {
             return;
         }
 
-        print(nome + " " + cognome + " " + nickname + " " + email + " " + password + " " + password2);
+        String passwordCriptata = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
+        Query.inserisciUtente(nome, cognome, nickname, email, passwordCriptata);
 
+        currentUser.setNome(nome);
+        currentUser.setCognome(cognome);
+        currentUser.setNickname(nickname);
+        currentUser.setEmail(email);
 
+        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML

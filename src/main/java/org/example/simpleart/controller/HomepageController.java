@@ -11,9 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import org.example.simpleart.model.Opera;
-import org.example.simpleart.model.Print;
-import org.example.simpleart.model.SceneHandler;
+import org.example.simpleart.model.*;
 import org.example.simpleart.model.Print;
 import java.io.IOException;
 import java.util.Objects;
@@ -29,7 +27,7 @@ public class HomepageController{
     @FXML
     private ImageView logo;
     @FXML
-    private Label userButton;
+    private Label userButton, stringaCiao;
     @FXML
     private HBox galleria;
     @FXML
@@ -41,7 +39,7 @@ public class HomepageController{
 
     public void initialize() throws IOException {
         SceneHandler.getInstance().getStage().setTitle("SimpleArt-Homepage");
-
+        stringaCiao.setText("Ciao " + currentUser.getNickname());
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gioconda.png")));
         Opera opera = new Opera(img, "La Gioconda", "Leonardo Da Vinci", 9999);
         riempiGalleria(opera);

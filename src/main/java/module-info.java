@@ -4,6 +4,7 @@ module org.example.simpleart {
     requires java.sql;
     requires java.desktop;
     requires javafx.swing;
+    requires spring.security.crypto;
 
 
     opens org.example.simpleart to javafx.fxml;

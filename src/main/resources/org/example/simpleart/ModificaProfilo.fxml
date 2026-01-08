@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.ProfiloPageController">
@@ -90,6 +89,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <ImageView fx:id="fotoProfilo" fitHeight="190.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
@@ -100,71 +100,41 @@
                   <Insets top="30.0" />
                </GridPane.margin>
             </ImageView>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="pulsanteGalleria" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#goToGallery" prefHeight="36.0" prefWidth="181.0" style="-fx-background-color: rgb(137, 204, 240); -fx-background-radius: 60;" text="Galleria">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../icone/gioconda.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="Arial" size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="pulsanteNelCuore" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#goToNelCuore" prefHeight="36.0" prefWidth="185.0" style="-fx-background-color: rgb(137, 204, 240); -fx-background-radius: 60;" text="Nel cuore">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../icone/Heart%20full.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="Arial" size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="modificaProfiloButton" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#vaiAModificaProfilo" style="-fx-background-color: rgb(137, 204, 240); -fx-background-radius: 60;" text="Modifica profilo">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../icone/gears.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="Arial" size="20.0" />
-                     </font>
-                  </Button>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
-               <children>
-                  <Label fx:id="nicknameLabel" text="Nickname">
-                     <font>
-                        <Font name="Arial Bold" size="20.0" />
-                     </font>
+                  <Label text="Cognome">
+                     <HBox.margin>
+                        <Insets right="30.0" />
+                     </HBox.margin>
                   </Label>
-                  <Label fx:id="nomeCognomeLabel" text="Nome Cognome" textFill="#6b6b6b">
-                     <font>
-                        <Font name="Arial Italic" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="emailLabel" text="Indirizzo email" textFill="#6b6b6b">
-                     <font>
-                        <Font name="Arial Italic" size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <TextArea fx:id="descrizioneBox" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="La tua descrizione" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <TextField fx:id="surnameField" />
+               </children></HBox>
+            <Button alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: rgb(255, 223, 95);" text="Sfoglia" GridPane.rowIndex="3">
                <font>
-                  <Font size="14.0" />
+                  <Font size="15.0" />
                </font>
-            </TextArea>
+            </Button>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Nome">
+                     <HBox.margin>
+                        <Insets right="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="nameField" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Label text="Nickname">
+                     <HBox.margin>
+                        <Insets right="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="nicknameField" />
+               </children>
+            </HBox>
+            <TextArea fx:id="descrizioneField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

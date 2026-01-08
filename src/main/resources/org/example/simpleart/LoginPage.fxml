@@ -47,7 +47,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#login" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Login">
+            <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onMouseClicked="#login" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Login">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

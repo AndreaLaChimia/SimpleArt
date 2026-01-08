@@ -11,9 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.example.simpleart.model.SceneHandler;
+import org.example.simpleart.model.currentUser;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
+
+import static org.example.simpleart.model.Print.print;
 
 public class LoginPageController{
 
@@ -40,14 +44,30 @@ public class LoginPageController{
 
     public void initialize(){
         logo.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/SimpleArt logo.png"))));
-        emailField.setText("");
+        if(currentUser.getEmail() == null || currentUser.getEmail().isEmpty())
+            emailField.setText("");
+        else
+            emailField.setText(currentUser.getEmail());
         passwordField.setText("");
         errorLabel.setText("");
+
+        loginButton.setDefaultButton(true);
     }
 
     @FXML
-    void login(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
+    void login(MouseEvent event) throws IOException, SQLException {
+        errorLabel.setText("");
+        if(emailField.getText().isEmpty() || passwordField.getText().isEmpty())
+            errorLabel.setText("Non tutti i campi sono compilati.");
+
+        if (Query.verificaPassword(emailField.getText().toLowerCase(), passwordField.getText())){
+            Query.getAllFromEmail(emailField.getText().toLowerCase());
+            SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
+            print(currentUser.getNome() + " " + currentUser.getCognome() +  " " + currentUser.getNickname() + " " + currentUser.getEmail());
+        }
+        else errorLabel.setText("Email o password non validi.");
+
+
     }
 
     @FXML

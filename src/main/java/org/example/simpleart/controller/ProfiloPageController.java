@@ -6,13 +6,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.example.simpleart.model.SceneHandler;
+import org.example.simpleart.model.currentUser;
 
-import javax.swing.border.Border;
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.example.simpleart.model.Print.print;
 
@@ -31,16 +33,16 @@ public class ProfiloPageController{
     private TextArea descrizioneBox;
 
     @FXML
-    private ImageView fotoProfilo1;
+    private ImageView fotoProfilo;
 
     @FXML
-    private Label indirizzoLabel;
+    private Label emailLabel;
 
     @FXML
     private Button modificaProfiloButton, exitButton;
 
     @FXML
-    private Label nicknameLabel1;
+    private Label nicknameLabel;
 
     @FXML
     private Label nomeCognomeLabel;
@@ -57,6 +59,14 @@ public class ProfiloPageController{
     @FXML
     private Label homeButton;
 
+    public void initialize(){
+        if(currentUser.getFoto() != null)
+            fotoProfilo.setImage(currentUser.getFoto());
+        nicknameLabel.setText(currentUser.getNickname());
+        nomeCognomeLabel.setText(currentUser.getNome() + " " + currentUser.getCognome());
+        emailLabel.setText(currentUser.getEmail());
+    }
+
     @FXML
     void canvasClicked(MouseEvent event) throws IOException {
         SceneHandler.getInstance().sceneLoader("Lavagna.fxml", root.getWidth(), root.getHeight());
@@ -70,6 +80,9 @@ public class ProfiloPageController{
     @FXML
     void vaiAModificaProfilo(MouseEvent event) {
         print("Pulsante modifica profilo schiacciato.");
+        Image foto = new Image(Objects.requireNonNull(getClass().getResource("/icone/gioconda.png")).toExternalForm());
+        currentUser.setFoto(foto);
+
     }
 
     @FXML
