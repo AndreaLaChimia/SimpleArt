@@ -12,7 +12,7 @@
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.LoginPageController">
    <center>
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="440.0" prefWidth="370.0" style="-fx-background-color: white; -fx-background-radius: 10;" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="617.0" prefWidth="370.0" style="-fx-background-color: white; -fx-background-radius: 10;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="logo" fitHeight="208.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -73,4 +73,7 @@
          </children>
       </VBox>
    </center>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </BorderPane>

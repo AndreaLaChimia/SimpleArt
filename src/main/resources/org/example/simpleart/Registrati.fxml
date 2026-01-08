@@ -5,14 +5,16 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.RegistratiController">
    <center>
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="440.0" prefWidth="370.0" style="-fx-background-color: white; -fx-background-radius: 10;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="617.0" prefWidth="370.0" style="-fx-background-color: white; -fx-background-radius: 10;" BorderPane.alignment="CENTER">
          <children>
             <Label text="Nome">
                <font>
@@ -22,52 +24,95 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="nomeField" promptText="Nome" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;">
+            <HBox alignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
-               </VBox.margin></TextField>
+               </VBox.margin>
+               <children>
+                  <TextField fx:id="nameField" prefHeight="370.0" prefWidth="370.0" promptText="Nome" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;" />
+                  <ImageView fx:id="questionButtonName" fitHeight="25.0" fitWidth="26.0" onMouseClicked="#questionButtonName" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/question.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
             <Label text="Cognome">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="cognomeField" promptText="Cognome" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;">
+            <HBox alignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
-               </VBox.margin></TextField>
+               </VBox.margin>
+               <children>
+                  <TextField fx:id="surnameField" prefHeight="370.0" prefWidth="370.0" promptText="Cognome" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;" />
+                  <ImageView fx:id="questionButtonSurname" fitHeight="25.0" fitWidth="26.0" onMouseClicked="#questionButtonSurname" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/question.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
             <Label text="Nickname">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="nicknameField" promptText="Nickname" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;">
+            <HBox alignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
-               </VBox.margin></TextField>
+               </VBox.margin>
+               <children>
+                  <TextField fx:id="nicknameField" prefHeight="370.0" prefWidth="370.0" promptText="Nickname" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;" />
+                  <ImageView fx:id="questionButtonNickname" fitHeight="25.0" fitWidth="26.0" onMouseClicked="#questionButtonNickname" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/question.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
             <Label text="Email">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font></Label>
-            <TextField fx:id="emailField" promptText="Email" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;">
+            <HBox alignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                </VBox.margin>
-            </TextField>
+               <children>
+                  <TextField fx:id="emailField" prefHeight="370.0" prefWidth="370.0" promptText="Email" style="-fx-background-color: rgb(224, 224, 235); -fx-border-radius: 10;" />
+                  <ImageView fx:id="questionButtonEmail" fitHeight="25.0" fitWidth="26.0" onMouseClicked="#questionButtonEmail" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/question.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
             <Label text="Password">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font></Label>
-            <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-color: rgb(224, 224, 235);">
+            <HBox alignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                </VBox.margin>
-            </PasswordField>
+               <children>
+                  <PasswordField fx:id="passwordField" prefHeight="370.0" prefWidth="370.0" promptText="Password" style="-fx-background-color: rgb(224, 224, 235);" />
+                  <ImageView fx:id="questionButtonPassword" fitHeight="25.0" fitWidth="26.0" onMouseClicked="#questionButtonPassword" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../icone/question.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
             <Label text="Inserisci nuovamente la password">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font>
             </Label>
-            <PasswordField fx:id="passwordField2" promptText="Password" style="-fx-background-color: rgb(224, 224, 235);">
+            <PasswordField fx:id="passwordField2" prefHeight="370.0" prefWidth="370.0" promptText="Password" style="-fx-background-color: rgb(224, 224, 235);">
                <VBox.margin>
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                </VBox.margin>
@@ -80,13 +125,21 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="registratiButton" mnemonicParsing="false" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Registrati">
+            <Button fx:id="registratiButton" mnemonicParsing="false" onMouseClicked="#registrati" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Registrati">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin></Button>
+            <Label fx:id="textFieldRule" alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="317.0" style="-fx-background-color: white; -fx-background-radius: 60;" text="Regole inserimento" visible="false" wrapText="true">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
             <Label text="Sei già registrato?">
                <VBox.margin>
                   <Insets top="10.0" />
@@ -95,7 +148,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="loginBottone" onMouseClicked="#login" text="Fai il login" textFill="#ff12db">
+            <Label fx:id="loginButton" onMouseClicked="#login" text="Fai il login" textFill="#ff12db">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -105,14 +158,18 @@
             </Label>
          </children>
          <BorderPane.margin>
-            <Insets right="35.0" />
+            <Insets />
          </BorderPane.margin>
       </VBox>
    </center>
    <left>
-      <ImageView fx:id="logo" fitHeight="273.0" fitWidth="262.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+      <VBox BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets left="85.0" />
-         </BorderPane.margin></ImageView>
+            <Insets />
+         </BorderPane.margin>
+      </VBox>
    </left>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </BorderPane>
