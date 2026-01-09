@@ -225,12 +225,12 @@
                   <Insets bottom="8.0" right="50.0" top="8.0" />
                </HBox.margin>
             </ImageView>
-            <TextField fx:id="nameImgField" prefHeight="26.0" prefWidth="178.0" promptText="Inserisci il titolo dell'opera" />
             <Button fx:id="scaricaButton" mnemonicParsing="false" onMouseClicked="#download" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: rgb(251, 176, 236); -fx-background-radius: 50;" text="Scarica">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
+            <TextField fx:id="nameImgField" prefHeight="26.0" prefWidth="178.0" promptText="Inserisci il titolo dell'opera" />
             <Button fx:id="pubblicaButton" mnemonicParsing="false" onMouseClicked="#postInGallery" style="-fx-background-color: rgb(137, 204, 240); -fx-background-radius: 50;" text="Pubblica">
                <font>
                   <Font name="System Bold" size="12.0" />

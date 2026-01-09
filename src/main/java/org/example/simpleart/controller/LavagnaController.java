@@ -2,6 +2,8 @@ package org.example.simpleart.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -15,16 +17,20 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.layout.StackPane;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import org.example.simpleart.model.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.spec.ECField;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -218,32 +224,48 @@ public class LavagnaController {
     }
 
     @FXML
-    void postInGallery(ActionEvent event) {
-        WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-        canvas.snapshot(null, writableImage);
+    void postInGallery(MouseEvent a) throws SQLException, IOException {
+        if(!nameImgField.getText().isEmpty()) {
+            Image img = canvas.snapshot(null, null);
+            Opera temp = new Opera(img, nameImgField.getText(), currentUser.getEmail(), true);
+            Query.addArt(temp);
+            print("Opera inserita.");
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Errore");
+            alert.setHeaderText("Non puoi salvare un'opera senza dargli un titolo.");
+            alert.showAndWait();
+        }
 
     }
 
     @FXML
     void download(MouseEvent event) throws IOException {
-        nomeOpera = nameImgField.getText();
-        if(nomeOpera != null && !nomeOpera.isEmpty()) {
-            DirectoryChooser dc = new DirectoryChooser();
-            dc.setTitle("Sfoglia");
-            String url = dc.showDialog(null).getAbsolutePath();
+        WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        canvas.snapshot(null, writableImage);
 
-            WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-            canvas.snapshot(null, writableImage);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salva immagine");
+        fileChooser.setInitialFileName("Opera");
 
-            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
-            File outputFile = new File(url + "\\" + nomeOpera + ".png");
-            ImageIO.write(bufferedImage, "png", outputFile);
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("SimpleArt-Warning");
-            alert.setHeaderText("Attenzione, non hai inserito il titolo alla tua opera.");
-            alert.showAndWait();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG Image", "*.png"),
+                new FileChooser.ExtensionFilter("JPEG Image", "*.jpg"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File file = fileChooser.showSaveDialog(null);
+
+        if(file != null) {
+            try {
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                ImageIO.write(bufferedImage, "png", file);
+
+
+            } catch (IOException a) {
+                print("Errore avvenuto durante il salvataggio: " + a);
+            }
         }
     }
 
@@ -526,5 +548,6 @@ public class LavagnaController {
         currentUser.clean();
         SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
+
 }
 

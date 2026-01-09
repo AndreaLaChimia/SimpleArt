@@ -7,8 +7,7 @@ public class Opera {
     private final String titolo;
     private final String autore;
     private final Boolean visibilita;
-
-
+    private int id;
 
     public Opera(Image img, String titolo, String autore, Boolean visibilita){
         this.img = img;
@@ -17,19 +16,29 @@ public class Opera {
         this.visibilita = visibilita;
     }
 
+    public Opera(Image img, String titolo, String autore, Boolean visibilita, int id){
+        this.img = img;
+        this.titolo = titolo;
+        this.autore = autore;
+        this.visibilita = visibilita;
+        this.id = id;
+    }
+
     public String getAutore() {
-        return autore;
+        return this.autore;
     }
 
     public String getTitolo() {
-        return titolo;
+        return this.titolo;
     }
 
     public Image getImg() {
-        return img;
+        return this.img;
     }
 
     public boolean getVisibilita() {
-        return visibilita;
+        return this.visibilita;
     }
+
+    public int getId(){return this.id;}
 }

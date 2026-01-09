@@ -89,8 +89,6 @@
                </font>
             </Label>
 
-            <Button fx:id="testButton" mnemonicParsing="false" onMouseClicked="#test" text="Button" />
-
             <ScrollPane fx:id="scrollOpere" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
                <content>
                   <FlowPane fx:id="flowOpere" alignment="CENTER" hgap="20" prefWrapLength="900" vgap="20" />

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefWidth="250.0" spacing="10" style="-fx-background-color: white; -fx-padding: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.CardOperaPropriaController">
+<VBox fx:id="root" alignment="CENTER" prefWidth="250.0" spacing="10" style="-fx-background-color: white; -fx-padding: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.CardOperaPropriaController">
    <HBox>
       <children>
       
@@ -51,9 +51,9 @@
                </ImageView>
             </graphic>
          </Button>
-         <Label fx:id="numeroLike" nodeOrientation="RIGHT_TO_LEFT" text="n.Like">
+         <Label fx:id="numeroLike" onMouseClicked="#mettiLike" nodeOrientation="RIGHT_TO_LEFT" text="n.Like">
             <graphic>
-               <ImageView fitHeight="22.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fx:id="buttonLikeImg" onMouseClicked="#mettiLike" fitHeight="22.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@../../../icone/like.png" />
                   </image>

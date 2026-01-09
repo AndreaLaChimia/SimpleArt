@@ -95,24 +95,7 @@ public class GalleriaController{
             flowOpere.getChildren().add(card);
         }
     }
-
-    @FXML
-    public void test(MouseEvent e) throws SQLException, IOException {
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gomma.png")));
-        Opera opera = new Opera(img, "La gomma", currentUser.getNickname(), true);
-        Query.addArt(opera);
-
-        Image img2 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Rabbia.png")).toExternalForm());
-        Opera opera2 = new Opera(img2, "Rabbia", currentUser.getNickname(), true);
-        Query.addArt(opera2);
-
-        Image img3 = new Image(Objects.requireNonNull(getClass().getResource("/opere/FruitsAndVegetable.png")).toExternalForm());
-        Opera opera3 = new Opera(img3, "FruttaEVerdura", currentUser.getNickname(), false);
-        Query.addArt(opera3);
-
-        caricaOpere();
-    }
-
+    
     @FXML
     public void backToProfile(MouseEvent e) throws IOException {
         SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());

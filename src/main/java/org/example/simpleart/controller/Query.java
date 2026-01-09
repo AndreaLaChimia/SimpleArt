@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -151,7 +150,7 @@ public class Query {
 
 
     public static ArrayList<Opera> getAllArtOfAnArtist(String mail) throws SQLException {
-        String query = "SELECT titolo, visibilita, dati FROM opera WHERE autore = ?";
+        String query = "SELECT titolo, visibilita, dati, id FROM opera WHERE autore = ?";
         ArrayList<Opera> arrayOpere = new ArrayList<>();
 
         try (Connection cn = Database.getConnection();
@@ -171,7 +170,9 @@ public class Query {
                         image = new Image(new ByteArrayInputStream(bytes));
                     }
 
-                    Opera temp = new Opera(image, titolo, mail, visibilita);
+                    int id = rs.getInt("id");
+
+                    Opera temp = new Opera(image, titolo, mail, visibilita, id);
                     arrayOpere.add(temp);
                 }
             }
@@ -179,6 +180,80 @@ public class Query {
 
         return arrayOpere;
     }
+
+    public static int contaLike(int id) {
+        String query = "SELECT COUNT(*) FROM `like` WHERE opera = ?";
+
+        try (Connection cn = Database.getConnection();
+             PreparedStatement ps = cn.prepareStatement(query)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean verificaSeLikeGiaPresente(int id){
+        String query = "SELECT EXISTS(SELECT 1 FROM `like` WHERE utente = ? AND opera = ?)";
+        try(
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query);
+                ){
+            ps.setString(1, currentUser.getEmail());
+            ps.setInt(2, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+                return rs.getInt(1) == 1;
+
+        }catch (SQLException s){
+            print("Errore controllo se like già presente o meno.");
+        }
+        return false;
+    }
+
+    public static void mettiLike(int id) throws SQLException {
+        String query = "INSERT INTO `like` (utente, opera) VALUES (?, ?)";
+
+        try(    Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query);)
+        {
+            ps.setString(1, currentUser.getEmail());
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            print("like messo.");
+
+        }catch (SQLException s){
+            print("Errore nell'inserimento del like.");
+        }
+    }
+
+    public static void togliLike(int id){
+        String query = "DELETE FROM `like` WHERE utente = ? and opera = ?";
+
+        try(
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query);
+                ){
+            ps.setString(1, currentUser.getEmail());
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        }catch (SQLException s){
+            print("Errore nel togliere il like.");
+        }
+    }
+
 
     public static byte[] imageToBytes(Image image) throws IOException {
 
