@@ -51,61 +51,76 @@ public class RegistratiController {
 
     @FXML
     public void registrati() throws SQLException, IOException {
-        print("Tasto registrati premuto.");
         textFieldRule.setVisible(false);
         errorLabel.setVisible(false);
-        String nome = nameField.getText();
-        String cognome = surnameField.getText();
-        String nickname = nicknameField.getText();
-        String email = emailField.getText().toLowerCase();
-        String password = passwordField.getText();
-        String password2 = passwordField2.getText();
+        if(campiNonVuoti()){
+            print("I campi non sono vuoti.");
+            String nome = nameField.getText();
+            String cognome = surnameField.getText();
+            String nickname = nicknameField.getText();
+            String email = emailField.getText().toLowerCase();
+            String password = passwordField.getText();
+            String password2 = passwordField2.getText();
 
-        if(!checkNameOrSurname(nome)) {
-            errorLabel.setVisible(true);
-            errorLabel.setText("Problemi col nome inserito.");
-            return;
+            if(!Query.isEmailAddressFree(email)){
+                errorLabel.setVisible(true);
+                errorLabel.setText("Indirizzo email già in uso.");
+                return;
+            }
+
+            if (!checkNameOrSurname(nome)) {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Problemi col nome inserito.");
+                return;
+            }
+
+            if (!checkNameOrSurname(cognome)) {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Problemi col cognome inserito.");
+                return;
+            }
+
+            if (!checkNickname(nickname)) {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Problemi col nickname inserito.");
+                return;
+            }
+
+            if (!checkEmail(email)) {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Problemi con l'email inserita.");
+                return;
+            }
+
+            if (!checkPassword(password) || !checkPassword(password2)) {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Problemi con la password inserita.");
+            }
+
+            if (!password.equals(password2)) {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Le due password non coincidono.");
+                return;
+            }
+
+            String passwordCriptata = BCrypt.hashpw(password, BCrypt.gensalt(12));
+
+            Query.inserisciUtente(nome, cognome, nickname, email, passwordCriptata);
+
+            currentUser.setNome(nome);
+            currentUser.setCognome(cognome);
+            currentUser.setNickname(nickname);
+            currentUser.setEmail(email);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("SimpleArt");
+            alert.setHeaderText("Registrazione avvenuta con successo!");
+            alert.show();
+            SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
         }
-
-        if(!checkNameOrSurname(cognome)){
+        else {
             errorLabel.setVisible(true);
-            errorLabel.setText("Problemi col cognome inserito.");
-            return;
+            errorLabel.setText("Non tutti i campi sono stati compilati.");
         }
-
-        if(!checkNickname(nickname)){
-            errorLabel.setVisible(true);
-            errorLabel.setText("Problemi col nickname inserito.");
-            return;
-        }
-
-        if(!checkEmail(email)){
-            errorLabel.setVisible(true);
-            errorLabel.setText("Problemi con l'email inserita.");
-            return;
-        }
-
-        if(!checkPassword(password) || !checkPassword(password2)){
-            errorLabel.setVisible(true);
-            errorLabel.setText("Problemi con la password inserita.");
-        }
-
-        if(!password.equals(password2)){
-            errorLabel.setVisible(true);
-            errorLabel.setText("Le due password non coincidono.");
-            return;
-        }
-
-        String passwordCriptata = BCrypt.hashpw(password, BCrypt.gensalt(12));
-
-        Query.inserisciUtente(nome, cognome, nickname, email, passwordCriptata);
-
-        currentUser.setNome(nome);
-        currentUser.setCognome(cognome);
-        currentUser.setNickname(nickname);
-        currentUser.setEmail(email);
-
-        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -136,6 +151,13 @@ public class RegistratiController {
     void questionButtonPassword(MouseEvent event) {
         textFieldRule.setVisible(true);
         textFieldRule.setText("Almeno una maiuscola e un numero.");
+    }
+
+    public Boolean campiNonVuoti(){
+        return !nameField.getText().isEmpty() ||
+                !surnameField.getText().isEmpty() ||
+                !nicknameField.getText().isEmpty() ||
+                !emailField.getText().isEmpty() || !passwordField.getText().isEmpty() || !passwordField2.getText().isEmpty();
     }
 
 }

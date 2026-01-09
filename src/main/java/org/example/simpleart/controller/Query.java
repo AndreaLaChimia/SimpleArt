@@ -3,6 +3,7 @@ package org.example.simpleart.controller;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.example.simpleart.model.Database;
+import org.example.simpleart.model.Opera;
 import org.example.simpleart.model.currentUser;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -11,10 +12,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.example.simpleart.model.Print.print;
 
@@ -108,6 +111,25 @@ public class Query {
 
     }
 
+    public static boolean isEmailAddressFree(String email) throws SQLException {
+        Connection cn = Database.getConnection();
+        String query = "SELECT email FROM utente WHERE email = ?";
+        PreparedStatement ps = cn.prepareStatement(query);
+        ps.setString(1, email);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            ps.close();
+            cn.close();
+            return false;
+        }
+
+        ps.close();
+        cn.close();
+        return true;
+    }
+
     public static byte[] imageToBytes(Image image) throws IOException {
 
         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
@@ -116,5 +138,36 @@ public class Query {
         ImageIO.write(bImage, "png", baos);
         return baos.toByteArray();
     }
+
+    public static ArrayList<Opera> getAllArtOfAnArtist(String mail) throws SQLException {
+        String query = "SELECT titolo, visibilita, dati FROM opera WHERE autore = ?";
+        ArrayList<Opera> arrayOpere = new ArrayList<>();
+
+        try (Connection cn = Database.getConnection();
+             PreparedStatement ps = cn.prepareStatement(query)) {
+
+            ps.setString(1, mail);
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    String titolo = rs.getString("titolo");
+                    boolean visibilita = rs.getInt("visibilita") == 1;
+
+                    byte[] bytes = rs.getBytes("dati");
+                    Image image = null;
+
+                    if (bytes != null) {
+                        image = new Image(new ByteArrayInputStream(bytes));
+                    }
+
+                    Opera temp = new Opera(image, titolo, mail, visibilita);
+                    arrayOpere.add(temp);
+                }
+            }
+        }
+
+        return arrayOpere;
+    }
+
 
 }

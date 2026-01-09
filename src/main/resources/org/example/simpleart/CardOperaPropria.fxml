@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="200" spacing="10" style="-fx-background-color: white; -fx-padding: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.CardOperaPropriaController">
+   <HBox>
+      <children>
+      
+         <!-- Titolo -->
+         <Label fx:id="titoloOpera" prefHeight="26.0" prefWidth="71.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Titolo">
+            <HBox.margin>
+               <Insets top="8.0" />
+            </HBox.margin>
+         </Label>
+         <Button fx:id="nascondiButton" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#hide" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: null;" text="Nascondi">
+            <graphic>
+               <ImageView fx:id="occhioImg" fitHeight="30.0" fitWidth="40.0" onMouseClicked="#hide" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../../../icone/eye.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+            <HBox.margin>
+               <Insets left="8.0" />
+            </HBox.margin>
+         </Button>
+      </children>
+   </HBox>
+
+   <!-- Immagine -->
+   <ImageView fx:id="fotoCard" fitWidth="180" preserveRatio="true">
+      <image>
+         <Image url="@../../../icone/gioconda.png" />
+      </image></ImageView>
+
+   <!-- Footer -->
+   <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" spacing="10">
+      <children>
+         <Button fx:id="downloadButton" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#scarica" style="-fx-background-color: rgb(255, 223, 95);" text="Scarica">
+            <graphic>
+               <ImageView fx:id="downloadImg" fitHeight="30.0" fitWidth="40.0" onMouseClicked="#scarica" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../../../icone/download.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+         </Button>
+         <Label fx:id="numeroLike" nodeOrientation="RIGHT_TO_LEFT" text="n.Like">
+            <graphic>
+               <ImageView fitHeight="22.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../../../icone/like.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+         </Label>
+      </children>
+   </HBox>
+   <HBox nodeOrientation="RIGHT_TO_LEFT" />
+
+</VBox>

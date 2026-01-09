@@ -200,14 +200,15 @@ public class LavagnaController {
 
     @FXML
     void goToProfile(MouseEvent event) throws IOException {
-        if(collezioneDiInsiemi.isEmpty())
+        /*if(collezioneDiInsiemi.isEmpty())
             SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
         else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Attenzione");
             alert.setHeaderText("Stai lasciando la lavagna con un opera in corso, vuoi davvero uscire?");
             alert.showAndWait();
-        }
+        }*/
+        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML

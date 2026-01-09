@@ -33,7 +33,6 @@ public class CardOperaController{
         fotoCard.setImage(opera.getImg());
         titoloOpera.setText(opera.getTitolo());
         autoreStringa.setText(opera.getAutore());
-        bottoneLike.setText(String.valueOf(opera.getNumeroLike()));
     }
 
     public void cliccatoMiPiace(MouseEvent e){

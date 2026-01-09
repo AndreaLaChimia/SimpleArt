@@ -41,19 +41,19 @@ public class HomepageController{
         SceneHandler.getInstance().getStage().setTitle("SimpleArt-Homepage");
         stringaCiao.setText("Ciao " + currentUser.getNickname());
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gioconda.png")));
-        Opera opera = new Opera(img, "La Gioconda", "Leonardo Da Vinci", 9999);
+        Opera opera = new Opera(img, "La Gioconda", "Leonardo Da Vinci", true);
         riempiGalleria(opera);
 
         Image img2 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Woman.png")).toExternalForm());
-        Opera opera2 = new Opera(img2, "La donna", "Andrea La Chimia", 20);
+        Opera opera2 = new Opera(img2, "La donna", "Andrea La Chimia", true);
         riempiGalleria(opera2);
 
         Image img3 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Rabbia.png")).toExternalForm());
-        Opera opera3 = new Opera(img3, "Rabbia", "Andrea La Chimia", 9);
+        Opera opera3 = new Opera(img3, "Rabbia", "Andrea La Chimia", true);
         riempiGalleria(opera3);
 
         Image img4 = new Image(Objects.requireNonNull(getClass().getResource("/opere/FruitsAndVegetable.png")).toExternalForm());
-        Opera opera4 = new Opera(img4, "Frutta e verdura", "Andrea La Chimia", 11);
+        Opera opera4 = new Opera(img4, "Frutta e verdura", "Andrea La Chimia", true);
         riempiGalleria(opera4);
 
 

@@ -6,18 +6,15 @@ public class Opera {
     private final Image img;
     private final String titolo;
     private final String autore;
-    private final int numeroLike;
+    private final Boolean visibilita;
 
 
-    public Opera(Image img, String titolo, String autore, int numeroLike){
+
+    public Opera(Image img, String titolo, String autore, Boolean visibilita){
         this.img = img;
         this.titolo = titolo;
         this.autore = autore;
-        this.numeroLike = numeroLike;
-    }
-
-    public int getNumeroLike() {
-        return numeroLike;
+        this.visibilita = visibilita;
     }
 
     public String getAutore() {
@@ -30,5 +27,9 @@ public class Opera {
 
     public Image getImg() {
         return img;
+    }
+
+    public boolean getVisibilita() {
+        return visibilita;
     }
 }

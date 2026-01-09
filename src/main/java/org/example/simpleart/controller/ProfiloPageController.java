@@ -92,9 +92,8 @@ public class ProfiloPageController{
     }
 
     @FXML
-    void goToGallery(MouseEvent event) {
-        print("Pulsante galleria schiacciato.");
-
+    void goToGallery(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("Galleria.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -103,8 +102,9 @@ public class ProfiloPageController{
     }
 
     @FXML
-    public void logOut(MouseEvent e){
-        print("Tentativo di logout.");
+    public void logOut(MouseEvent e) throws IOException {
+        currentUser.clean();
+        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 
 
