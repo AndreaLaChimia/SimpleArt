@@ -113,6 +113,7 @@ public class RegistratiController {
             currentUser.setEmail(email);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("SimpleArt");
+            alert.setHeaderText("Registrazione avvenuta con successo!");
             Query.mettiNelCuore("andrealachimia@gmail.com");
             Query.mettiNelCuore("admin@simpleart.com");
             Query.mettiNelCuore("anna@gmail.com");
