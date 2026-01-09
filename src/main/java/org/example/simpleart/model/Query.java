@@ -345,6 +345,115 @@ public class Query {
         return utenti;
     }
 
+    public static String getNickname(String email){
+        //Il seguente metodo restituisce il nickname di un artista partendo dalla sua email
+
+        String query = "SELECT nickname FROM utente WHERE email = ?";
+
+        try(
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query);
+                ){
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+                return rs.getString(1);
+            return "anonimo";
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Image getFoto(String email) {
+
+        String query = "SELECT foto FROM utente WHERE email = ?";
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                byte[] blob = rs.getBytes("foto");
+
+                if (blob != null) {
+                    return new Image(new ByteArrayInputStream(blob));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new Image(Objects.requireNonNull(
+                Query.class.getResource("/icone/artist.png")
+        ).toExternalForm());
+    }
+
+    public static boolean verificaSeUtenteENelCuore(String mail) {
+        String query = "SELECT 1 FROM nelCuore WHERE utente1 = ? AND utente2 = ?";
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            ps.setString(1, currentUser.getEmail());
+            ps.setString(2, mail);
+
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public static boolean mettiNelCuore(String email) {
+        String query = "INSERT INTO nelCuore (utente1, utente2) VALUES (?, ?)";
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            ps.setString(1, currentUser.getEmail());
+            ps.setString(2, email);
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean togliDalCuore(String email) {
+        String query = "DELETE FROM nelCuore WHERE utente1 = ? AND utente2 = ?";
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            ps.setString(1, currentUser.getEmail());
+            ps.setString(2, email);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
 
     public static byte[] imageToBytes(Image image) throws IOException {

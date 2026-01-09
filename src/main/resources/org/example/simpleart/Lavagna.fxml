@@ -43,9 +43,9 @@
                   <Image url="@../../../icone/aToB.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="testo" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#addTextSelected" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+            <ImageView fx:id="matitaImg" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#matitaSelected" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../../../icone/abc.png" />
+                  <Image url="@../../../icone/pencil.png" />
                </image>
             </ImageView>
             <ImageView fx:id="bidone" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#binSelected" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">

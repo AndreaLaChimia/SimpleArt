@@ -47,7 +47,7 @@
                <Font size="14.0" />
             </font>
          </Button>
-         <Button fx:id="nelCuore" onMouseClicked="#cliccatoCuore" style="-fx-background-color: white;" text="Nel cuore">
+         <Button fx:id="nelCuoreButton" onMouseClicked="#cliccatoCuore" style="-fx-background-color: white;" text="Nel cuore">
             <graphic>
                <ImageView fx:id="cuoreIcona" fitWidth="16" preserveRatio="true">
                   <image>

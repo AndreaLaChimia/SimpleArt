@@ -36,7 +36,7 @@ public class LavagnaController {
     private BorderPane root;
 
     @FXML
-    private ImageView bidone, currentToolImg, gomma, livello, pennello, profiloButton, secchiello, testo, undoButton;
+    private ImageView bidone, currentToolImg, gomma, livello, pennello, profiloButton, secchiello, matitaImg, undoButton;
 
     @FXML
     private Canvas canvas;
@@ -85,12 +85,13 @@ public class LavagnaController {
     Originator originator;
     CareTaker careTaker;
     String nomeOpera = null;
+    Boolean disegnoInCorso = false;
 
     public enum Tool{
         Brush,
         Eraser,
         Bucket,
-        Text,
+        Pencil,
         Line;
     }
 
@@ -116,9 +117,13 @@ public class LavagnaController {
 
 
     @FXML
-    void addTextSelected(MouseEvent event) {
-        currentTool = Tool.Text;
-        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/abc.png"))));
+    void matitaSelected(MouseEvent event) {
+        currentTool = Tool.Pencil;
+        currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/pencil.png"))));
+        scrollSize.setValue(1);
+        currentBrushStatus.setFill(currentColor);
+        currentBrushStatus.setRadius(1);
+        sizeBoxNumber.setText("1");
     }
 
     @FXML
@@ -156,6 +161,9 @@ public class LavagnaController {
             }
             case Tool.Eraser -> {
                 tolleranza = scrollSize.getValue();
+            }
+            case Tool.Pencil -> {
+                scrollSize.setValue(1);
             }
 
         }
@@ -201,21 +209,32 @@ public class LavagnaController {
 
     @FXML
     void goToProfile(MouseEvent event) throws IOException {
-        /*if(collezioneDiInsiemi.isEmpty())
+        print(String.valueOf(disegnoInCorso));
+        if(disegnoInCorso){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Attenzione!");
+            alert.setHeaderText("Stai lasciando la lavagna senza avere pubblicato l'opera." +
+                    "\nL'opera andrà persa, sei sicuro di volere uscire?");
+            alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            ButtonType bottoneSchiacciato = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if(bottoneSchiacciato == ButtonType.OK)
+                SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
+            else
+                return;
+        }
+        else
             SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
-        else{
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Attenzione");
-            alert.setHeaderText("Stai lasciando la lavagna con un opera in corso, vuoi davvero uscire?");
-            alert.showAndWait();
-        }*/
-        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
     void makeLine(MouseEvent event) {
         currentTool = Tool.Line;
         currentToolImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/aToB.png"))));
+        scrollSize.setValue(sizeBrush);
+        currentBrushStatus.setFill(currentColor);
+        currentBrushStatus.setRadius(sizeBrush/2);
+        sizeBoxNumber.setText(String.valueOf((int)sizeBrush.longValue()));
     }
 
     @FXML
@@ -225,6 +244,11 @@ public class LavagnaController {
             Opera temp = new Opera(img, nameImgField.getText(), currentUser.getEmail(), true);
             Query.addArt(temp);
             print("Opera inserita.");
+            disegnoInCorso = false;
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Pubblicazione");
+            alert.setHeaderText("L'opera è stata pubblicata con successo!\nPuoi trovarla nella tua galleria.");
+            alert.show();
         }
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -256,7 +280,10 @@ public class LavagnaController {
             try {
                 BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
                 ImageIO.write(bufferedImage, "png", file);
-
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Download");
+                alert.setHeaderText("L'opera è stata scaricata con successo!");
+                alert.show();
 
             } catch (IOException a) {
                 print("Errore avvenuto durante il salvataggio: " + a);
@@ -332,7 +359,9 @@ public class LavagnaController {
     }
 
     public void clickOnCanvas(){
+        print("Hai cliccato sul canvas");
         canvas.setOnMousePressed(e-> {
+            disegnoInCorso = true;
             createSnapshot();
             print("Aggiunto un memento.");
             switch (currentTool) {
@@ -379,7 +408,20 @@ public class LavagnaController {
 
                         piazzatoPuntoA = false;
                     }
-
+                }
+                case Pencil -> {
+                    {
+                        insiemeDiPunti = new ArrayList<>();
+                        firstX = e.getX();
+                        firstY = e.getY();
+                        Point p = new Point(firstX, firstY, firstX, firstY, 1.0, currentColor);
+                        insiemeDiPunti.add(p);
+                        for (Point i : insiemeDiPunti) {
+                            gc.setLineWidth(1);
+                            gc.setStroke(i.getColor());
+                            gc.strokeLine(i.getFirstX(), i.getFirstY(), i.getLastX(), i.getLastY());
+                        }
+                    }
                 }
             }
         });
@@ -402,16 +444,26 @@ public class LavagnaController {
                 case Eraser -> {
                     usoGomma(e);
                 }
+                case Pencil -> {
+                    lastX = e.getX();
+                    lastY = e.getY();
+                    Point p = new Point(firstX, firstY, e.getX(), e.getY(), 1.0, currentColor);
+                    insiemeDiPunti.add(p);
+                    firstX = lastX;
+                    firstY = lastY;
+                    for (Point i : insiemeDiPunti) {
+                        gc.setLineWidth(1);
+                        gc.setStroke(i.getColor());
+                        gc.strokeLine(i.getFirstX(), i.getFirstY(), i.getLastX(), i.getLastY());
+                    }
+                }
             }
         });
 
         canvas.setOnMouseReleased(e->{
             switch (currentTool) {
-                case Brush -> {
+                case Brush, Pencil -> {
                     collezioneDiInsiemi.add(insiemeDiPunti);
-                }
-                case Text -> {
-
                 }
             }
         });

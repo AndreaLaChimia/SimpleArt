@@ -40,11 +40,7 @@ public class HomepageController{
         SceneHandler.getInstance().getStage().setTitle("SimpleArt-Homepage");
         stringaCiao.setText("Ciao " + currentUser.getNickname());
 
-        List<Opera> opereCasuali = Query.getOpereCasuali();
-        for (Opera opera : opereCasuali) {
-            print("Id dell'opera caricata in homepage: " + String.valueOf(opera.getId()));
-            riempiGalleria(opera);
-        }
+        riempiGalleria();
     }
 
     @FXML
@@ -63,23 +59,27 @@ public class HomepageController{
     }
 
     @FXML
-    void refreshClicked(MouseEvent event) {
-        print("Hai cliccato refresh ma non è successo niente.");
+    void refreshClicked(MouseEvent event) throws IOException {
+        riempiGalleria();
     }
 
-    public void riempiGalleria(Opera opera) throws IOException {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/simpleart/CardOpera.fxml"));
-            Parent card = loader.load();
+    public void riempiGalleria() throws IOException {
+        galleria.getChildren().clear();
+        List<Opera> opereCasuali = Query.getOpereCasuali();
+        for(Opera opera : opereCasuali) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/simpleart/CardOpera.fxml"));
+                Parent card = loader.load();
 
-            CardOperaController controller = loader.getController();
+                CardOperaController controller = loader.getController();
 
-            controller.setOpera(opera);
+                controller.setOpera(opera);
 
-            galleria.getChildren().add(card);
+                galleria.getChildren().add(card);
 
-        }catch (IOException a){
-            print("Errore" + a);
+            } catch (IOException a) {
+                print("Errore" + a);
+            }
         }
     }
 

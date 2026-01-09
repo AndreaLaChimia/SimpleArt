@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.example.simpleart.model.Opera;
 import org.example.simpleart.model.Query;
+import org.example.simpleart.model.currentUser;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -23,8 +24,9 @@ public class CardOperaController{
     private Label autoreStringa, titoloOpera;
 
     @FXML
-    private Button numeroLike;
+    private Button numeroLike, nelCuoreButton;
 
+    private String emailAutoreOpera;
     private Image like = new Image(Objects.requireNonNull(getClass().getResource("/icone/like.png")).toExternalForm());
     private Image likeEmpty = new Image(Objects.requireNonNull(getClass().getResource("/icone/like empty.png")).toExternalForm());
     private Image cuore = new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart full.png")).toExternalForm());
@@ -39,13 +41,25 @@ public class CardOperaController{
     public void setOpera(Opera opera){
         fotoCard.setImage(opera.getImg());
         titoloOpera.setText(opera.getTitolo());
-        autoreStringa.setText(opera.getAutore());
+        autoreStringa.setText(Query.getNickname(opera.getAutore()));
+        autoreFoto.setImage(Query.getFoto(opera.getAutore()));
+        emailAutoreOpera = opera.getAutore();
         if(Query.verificaSeLikeGiaPresente(idOpera)){
             imgLike.setImage(likeEmpty);
         }
         else imgLike.setImage(like);
         idOpera = opera.getId();
         numeroLike.setText(String.valueOf(Query.contaLike(idOpera)));
+
+        if(!Query.verificaSeUtenteENelCuore(opera.getAutore())){
+            cuoreIcona.setImage(cuoreVuoto);
+        }
+        else cuoreIcona.setImage(cuore);
+
+        if(emailAutoreOpera.equals(currentUser.getEmail())) {
+            nelCuoreButton.setVisible(false);
+
+        }
 
     }
 
@@ -67,5 +81,13 @@ public class CardOperaController{
     }
 
     public void cliccatoCuore(MouseEvent e){
+        if(!Query.verificaSeUtenteENelCuore(emailAutoreOpera) && !currentUser.getEmail().equals(emailAutoreOpera)){
+            Query.mettiNelCuore(emailAutoreOpera);
+            cuoreIcona.setImage(cuore);
+        }
+        else{
+            Query.togliDalCuore(emailAutoreOpera);
+            cuoreIcona.setImage(cuoreVuoto);
+        }
     }
 }
