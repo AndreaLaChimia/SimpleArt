@@ -19,10 +19,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
 import javafx.stage.DirectoryChooser;
-import org.example.simpleart.model.CareTaker;
-import org.example.simpleart.model.Originator;
-import org.example.simpleart.model.Point;
-import org.example.simpleart.model.SceneHandler;
+import org.example.simpleart.model.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -105,6 +102,7 @@ public class LavagnaController {
 
         clickOnCanvas(); //Qui è dove si decide cosa avviene al tocco della lavagna.
 
+        gestisciResizeScene();
 
     }
 
@@ -202,7 +200,14 @@ public class LavagnaController {
 
     @FXML
     void goToProfile(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
+        if(collezioneDiInsiemi.isEmpty())
+            SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Attenzione");
+            alert.setHeaderText("Stai lasciando la lavagna con un opera in corso, vuoi davvero uscire?");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -414,16 +419,27 @@ public class LavagnaController {
     @FXML
     void setCanvasWidthAndHeight(ActionEvent event) {
         try{
-            double newWidth  = Double.parseDouble(larghezzaBox.getText());
-            double newHeight = Double.parseDouble(altezzaBox.getText());
+            double nuovaLarghezza  = Double.parseDouble(larghezzaBox.getText());
+            double nuovaAltezza = Double.parseDouble(altezzaBox.getText());
 
-            createSnapshot();
+            /*if (root.getWidth() == 900 && root.getHeight() == 600){
+                if(nuovaLarghezza > 600)
+                    nuovaLarghezza = 600;
+                if(nuovaAltezza > 400)
+                    nuovaAltezza = 400;
+            }
+            createSnapshot();*/
+            if(root.getWidth() - nuovaLarghezza < 300)
+                nuovaLarghezza = root.getWidth() - 300;
 
-            stackPane.setPrefWidth(newWidth);
-            stackPane.setPrefHeight(newHeight);
+            if(root.getHeight() - nuovaAltezza < 200)
+                nuovaAltezza = root.getHeight() - 200;
 
-            canvas.setWidth(newWidth);
-            canvas.setHeight(newHeight);
+            stackPane.setPrefWidth(nuovaLarghezza);
+            stackPane.setPrefHeight(nuovaAltezza);
+
+            canvas.setWidth(nuovaLarghezza);
+            canvas.setHeight(nuovaAltezza);
 
             redrawOnCanvas();
         } catch (NumberFormatException e) {
@@ -484,9 +500,30 @@ public class LavagnaController {
         undoButton.setOpacity(1);
     }
 
+    public void gestisciResizeScene(){
+        root.sceneProperty().addListener((obsScene, oldScene, newScene) -> {
+            if (newScene != null) {
+
+                newScene.widthProperty().addListener((obs, oldW, newW) -> {
+                    if((double)newW - canvas.getWidth() < 300){
+                        canvas.setWidth((double) newW - 300);
+                    }
+                });
+
+                newScene.heightProperty().addListener((obs, oldH, newH) -> {
+                    if((double)newH - canvas.getHeight() < 200){
+                        canvas.setHeight((double) newH - 200);
+                    }
+                });
+            }
+        });
+
+    }
+
     @FXML
-    public void logOut(MouseEvent e){
-        print("Tentativo di logout.");
+    public void logOut(MouseEvent e) throws IOException {
+        currentUser.clean();
+        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 }
 

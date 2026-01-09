@@ -62,4 +62,12 @@ public class currentUser {
         currentUser.descrizione = descrizione;
     }
 
+    public static void clean(){
+        currentUser.nome = null;
+        currentUser.cognome = null;
+        currentUser.nickname = null;
+        currentUser.email = null;
+        currentUser.foto = null;
+        currentUser.descrizione = null;
+    }
 }

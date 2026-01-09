@@ -1,11 +1,16 @@
 package org.example.simpleart.controller;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.example.simpleart.model.Database;
 import org.example.simpleart.model.currentUser;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,9 +21,9 @@ import static org.example.simpleart.model.Print.print;
 public class Query {
 
     public static void inserisciUtente(String name, String surname, String nickname, String email, String password) throws SQLException {
-        Connection connection = Database.getConnection();
+        Connection cn = Database.getConnection();
         String query = "INSERT INTO utente (nome, cognome, nickname, email, password) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(query);
+        PreparedStatement ps = cn.prepareStatement(query);
 
         ps.setString(1, name);
         ps.setString(2, surname);
@@ -28,6 +33,7 @@ public class Query {
 
         int riuscito = ps.executeUpdate();
         ps.close();
+        cn.close();
         if(riuscito == 1) {
             print("Inserimento del nuovo utente avvenuto con successo!");
         }
@@ -48,9 +54,14 @@ public class Query {
             temp = rs.getString(1);
         }
 
-        if(temp != null)
+        if(temp != null) {
+            ps.close();
+            cn.close();
             return BCrypt.checkpw(password, temp);
+        }
 
+        ps.close();
+        cn.close();
         return false;
     }
 
@@ -77,5 +88,33 @@ public class Query {
             }
             currentUser.setDescrizione(rs.getString(5));
         }
+        ps.close();
+        cn.close();
     }
+
+    public static int modificaDatiUtente(String nome, String cognome, String nickname, Image foto, String descrizione) throws SQLException, IOException {
+        Connection cn = Database.getConnection();
+        String query = "UPDATE utente SET nome = ?, cognome = ?, nickname = ?, foto = ?, descrizione = ? where email = ?";
+        PreparedStatement ps = cn.prepareStatement(query);
+        ps.setString(1, nome);
+        ps.setString(2, cognome);
+        ps.setString(3, nickname);
+        byte[] array = imageToBytes(foto);
+        ps.setBytes(4, array);
+        ps.setString(5, descrizione);
+        ps.setString(6, currentUser.getEmail());
+
+        return ps.executeUpdate();
+
+    }
+
+    public static byte[] imageToBytes(Image image) throws IOException {
+
+        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", baos);
+        return baos.toByteArray();
+    }
+
 }

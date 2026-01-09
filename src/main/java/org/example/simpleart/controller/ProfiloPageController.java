@@ -65,6 +65,9 @@ public class ProfiloPageController{
         nicknameLabel.setText(currentUser.getNickname());
         nomeCognomeLabel.setText(currentUser.getNome() + " " + currentUser.getCognome());
         emailLabel.setText(currentUser.getEmail());
+        if(currentUser.getDescrizione() != null)
+            descrizioneBox.setText(currentUser.getDescrizione());
+
     }
 
     @FXML
@@ -78,10 +81,8 @@ public class ProfiloPageController{
     }
 
     @FXML
-    void vaiAModificaProfilo(MouseEvent event) {
-        print("Pulsante modifica profilo schiacciato.");
-        Image foto = new Image(Objects.requireNonNull(getClass().getResource("/icone/gioconda.png")).toExternalForm());
-        currentUser.setFoto(foto);
+    void vaiAModificaProfilo(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("ModificaProfilo.fxml", root.getWidth(), root.getHeight());
 
     }
 
@@ -105,5 +106,6 @@ public class ProfiloPageController{
     public void logOut(MouseEvent e){
         print("Tentativo di logout.");
     }
+
 
 }
