@@ -82,11 +82,20 @@
                   <Font name="Forte" size="31.0" />
                </font>
             </Label>
-            <ScrollPane prefHeight="272.0" prefWidth="560.0">
+            <Button fx:id="testButton" mnemonicParsing="false" onMouseClicked="#test" text="Button" />
+            <ScrollPane fx:id="scrollOpere"
+                        fitToWidth="true"
+                        hbarPolicy="NEVER"
+                        vbarPolicy="AS_NEEDED"
+                        styleClass="invisible-scroll">
                <content>
-                  <VBox fx:id="vBoxOpere" alignment="CENTER" prefHeight="230.0" prefWidth="542.0" spacing="15.0" />
+                  <VBox fx:id="vBoxOpere"
+                        alignment="CENTER"
+                        spacing="15.0"
+                        fillWidth="false" />
                </content>
             </ScrollPane>
+
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" />

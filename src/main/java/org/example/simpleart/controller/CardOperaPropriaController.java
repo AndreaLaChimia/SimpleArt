@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.example.simpleart.model.Opera;
 
 public class CardOperaPropriaController{
 
@@ -36,7 +37,15 @@ public class CardOperaPropriaController{
 
     @FXML
     void scarica(MouseEvent event) {
+    }
 
+    public void setOpera(Opera opera){
+        fotoCard.setImage(opera.getImg());
+        titoloOpera.setText(opera.getTitolo());
+        if(!opera.getVisibilita()) {
+            occhioImg.setOpacity(0.5);
+            nascondiButton.setText("Mostra opera");
+        }
     }
 
 }

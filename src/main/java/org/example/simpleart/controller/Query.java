@@ -130,14 +130,25 @@ public class Query {
         return true;
     }
 
-    public static byte[] imageToBytes(Image image) throws IOException {
+    public static void addArt(Opera opera) throws SQLException, IOException {
+        String query = "INSERT INTO opera (titolo, autore, visibilita, dati) VALUES (?, ?, ?, ?)";
 
-        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+        try (Connection cn = Database.getConnection();
+             PreparedStatement ps = cn.prepareStatement(query)) {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bImage, "png", baos);
-        return baos.toByteArray();
+            int vis = opera.getVisibilita() ? 1 : 0;
+
+            ps.setString(1, opera.getTitolo());
+            ps.setString(2, currentUser.getEmail());
+            ps.setInt(3, vis);
+
+            byte[] array = imageToBytes(opera.getImg());
+            ps.setBytes(4, array);
+
+            ps.executeUpdate();
+        }
     }
+
 
     public static ArrayList<Opera> getAllArtOfAnArtist(String mail) throws SQLException {
         String query = "SELECT titolo, visibilita, dati FROM opera WHERE autore = ?";
@@ -167,6 +178,15 @@ public class Query {
         }
 
         return arrayOpere;
+    }
+
+    public static byte[] imageToBytes(Image image) throws IOException {
+
+        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", baos);
+        return baos.toByteArray();
     }
 
 
