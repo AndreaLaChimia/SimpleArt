@@ -55,7 +55,6 @@ public class RegistratiController {
         textFieldRule.setVisible(false);
         errorLabel.setVisible(false);
         if(campiNonVuoti()){
-            print("I campi non sono vuoti.");
             String nome = nameField.getText();
             String cognome = surnameField.getText();
             String nickname = nicknameField.getText();
@@ -114,7 +113,11 @@ public class RegistratiController {
             currentUser.setEmail(email);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("SimpleArt");
-            alert.setHeaderText("Registrazione avvenuta con successo!");
+            Query.mettiNelCuore("andrealachimia@gmail.com");
+            Query.mettiNelCuore("admin@simpleart.com");
+            Query.mettiNelCuore("anna@gmail.com");
+            Query.mettiNelCuore("danila@gmail.com");
+            Query.mettiNelCuore("marina@gmail.com");
             alert.show();
             SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
         }

@@ -32,7 +32,8 @@ public class CardUtenteController {
         fotoCard.setImage(utente.getFoto());
         nameSurnameLabel.setText(utente.getNome() + " " + utente.getCognome());
         emailLabel.setText(utente.getEmail());
-        followerLabel.setText(Query.contaFollower(utente.getEmail() + " followers"));
+        followerLabel.setText(Query.contaFollower(utente.getEmail()) + " follower"
+        );
     }
 
 }

@@ -199,7 +199,21 @@ public class LavagnaController {
 
     @FXML
     void goToHome(MouseEvent event) throws IOException {
-        SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
+        if(disegnoInCorso){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Attenzione!");
+            alert.setHeaderText("Stai lasciando la lavagna senza avere pubblicato l'opera." +
+                    "\nL'opera andrà persa, sei sicuro di volere uscire?");
+            alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            ButtonType bottoneSchiacciato = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if(bottoneSchiacciato == ButtonType.OK)
+                SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
+            else
+                return;
+        }
+        else
+            SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -209,7 +223,6 @@ public class LavagnaController {
 
     @FXML
     void goToProfile(MouseEvent event) throws IOException {
-        print(String.valueOf(disegnoInCorso));
         if(disegnoInCorso){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Attenzione!");
@@ -590,10 +603,28 @@ public class LavagnaController {
 
     }
 
+
     @FXML
-    public void logOut(MouseEvent e) throws IOException {
-        currentUser.clean();
-        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
+    public void logOut(MouseEvent e) throws IOException{
+        if(disegnoInCorso){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Attenzione!");
+            alert.setHeaderText("Stai lasciando la lavagna senza avere pubblicato l'opera." +
+                    "\nL'opera andrà persa, sei sicuro di volere uscire?");
+            alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            ButtonType bottoneSchiacciato = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if(bottoneSchiacciato == ButtonType.OK) {
+                currentUser.clean();
+                SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
+            }
+            else
+                return;
+        }
+        else {
+            currentUser.clean();
+            SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
+        }
     }
 
 }

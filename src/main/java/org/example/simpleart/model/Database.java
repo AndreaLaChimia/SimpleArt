@@ -14,12 +14,9 @@ public class Database {
             String url = "jdbc:sqlite:SimpleArt.db";
             cn = DriverManager.getConnection(url);
 
-            // Attiva le foreign key
             try (Statement st = cn.createStatement()) {
                 st.execute("PRAGMA foreign_keys = ON;");
             }
-
-            System.out.println("Connected to SQLite");
         }
         return cn;
     }

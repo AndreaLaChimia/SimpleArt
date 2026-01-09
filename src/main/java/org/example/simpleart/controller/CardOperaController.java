@@ -44,11 +44,11 @@ public class CardOperaController{
         autoreStringa.setText(Query.getNickname(opera.getAutore()));
         autoreFoto.setImage(Query.getFoto(opera.getAutore()));
         emailAutoreOpera = opera.getAutore();
-        if(Query.verificaSeLikeGiaPresente(idOpera)){
-            imgLike.setImage(likeEmpty);
-        }
-        else imgLike.setImage(like);
         idOpera = opera.getId();
+        if(Query.verificaSeLikeGiaPresente(idOpera)){
+            imgLike.setImage(like);
+        }
+        else imgLike.setImage(likeEmpty);
         numeroLike.setText(String.valueOf(Query.contaLike(idOpera)));
 
         if(!Query.verificaSeUtenteENelCuore(opera.getAutore())){
