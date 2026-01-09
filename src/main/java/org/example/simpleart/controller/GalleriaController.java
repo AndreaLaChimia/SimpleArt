@@ -12,8 +12,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import org.example.simpleart.model.Opera;
+import org.example.simpleart.model.SceneHandler;
 import org.example.simpleart.model.currentUser;
 
 import java.io.IOException;
@@ -51,18 +53,17 @@ public class GalleriaController{
     private BorderPane root;
 
     @FXML
-    private VBox vBoxOpere;
+    private FlowPane flowOpere;
 
     public void initialize() throws SQLException, IOException {
         galleriaLabel.setText("La galleria di " + currentUser.getNickname());
         caricaOpere();
-        System.out.println(getClass().getResource("/css/style.css"));
 
     }
 
     @FXML
-    void canvasClicked(MouseEvent event) {
-
+    void canvasClicked(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("Lavagna.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -71,16 +72,18 @@ public class GalleriaController{
     }
 
     @FXML
-    void goToHome(MouseEvent event) {
-
+    void goToHome(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("Homepage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
-    void logOut(MouseEvent event) {
-
+    void logOut(MouseEvent event) throws IOException {
+        currentUser.clean();
+        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 
     public void caricaOpere() throws SQLException, IOException {
+        flowOpere.getChildren().clear();
         ArrayList<Opera> opere = Query.getAllArtOfAnArtist(currentUser.getEmail());
         for(Opera i : opere) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/simpleart/CardOperaPropria.fxml"));
@@ -89,21 +92,29 @@ public class GalleriaController{
             CardOperaPropriaController controller = loader.getController();
 
             controller.setOpera(i);
-            vBoxOpere.getChildren().add(card);
+            flowOpere.getChildren().add(card);
         }
     }
 
     @FXML
     public void test(MouseEvent e) throws SQLException, IOException {
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gioconda.png")));
-        Opera opera = new Opera(img, "La Gioconda", currentUser.getNickname(), true);
+        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gomma.png")));
+        Opera opera = new Opera(img, "La gomma", currentUser.getNickname(), true);
         Query.addArt(opera);
 
-        Image img2 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Woman.png")).toExternalForm());
-        Opera opera2 = new Opera(img2, "La donna", currentUser.getNickname(), true);
+        Image img2 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Rabbia.png")).toExternalForm());
+        Opera opera2 = new Opera(img2, "Rabbia", currentUser.getNickname(), true);
         Query.addArt(opera2);
+
+        Image img3 = new Image(Objects.requireNonNull(getClass().getResource("/opere/FruitsAndVegetable.png")).toExternalForm());
+        Opera opera3 = new Opera(img3, "FruttaEVerdura", currentUser.getNickname(), false);
+        Query.addArt(opera3);
 
         caricaOpere();
     }
 
+    @FXML
+    public void backToProfile(MouseEvent e) throws IOException {
+        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
+    }
 }
