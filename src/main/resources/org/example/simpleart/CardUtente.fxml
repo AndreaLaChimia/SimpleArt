@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="root" prefWidth="200" spacing="10" style="-fx-background-color: white; -fx-padding: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.simpleart.controller.CardUtenteController">
+
+   <!-- Titolo -->
+   <Label fx:id="nicknameLabel" style="-fx-font-size: 16; -fx-font-weight: bold;" text="NomeUtente" />
+
+   <!-- Immagine -->
+   <ImageView fx:id="fotoCard" fitWidth="180" preserveRatio="true">
+      <image>
+         <Image url="@../../../icone/artist.png" />
+      </image></ImageView>
+   <VBox prefHeight="0.0" prefWidth="180.0" spacing="10.0">
+      <children>
+         <Label fx:id="nameSurnameLabel" text="Label">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Label>
+         <Label fx:id="emailLabel" text="Label">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Label>
+      </children>
+   </VBox>
+   <HBox nodeOrientation="RIGHT_TO_LEFT" spacing="10.0">
+      <children>
+         <ImageView fx:id="followersImg" fitHeight="40.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../../icone/followers.png" />
+            </image>
+         </ImageView>
+         <Label fx:id="followerLabel" text="numero di followers">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <HBox.margin>
+               <Insets top="20.0" />
+            </HBox.margin></Label>
+      </children>
+   </HBox>
+
+</VBox>

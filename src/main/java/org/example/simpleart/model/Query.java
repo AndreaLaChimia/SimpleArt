@@ -1,10 +1,7 @@
-package org.example.simpleart.controller;
+package org.example.simpleart.model;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import org.example.simpleart.model.Database;
-import org.example.simpleart.model.Opera;
-import org.example.simpleart.model.currentUser;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.imageio.ImageIO;
@@ -17,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static org.example.simpleart.model.Print.print;
 
@@ -232,9 +231,8 @@ public class Query {
             ps.executeUpdate();
             print("like messo.");
 
-        }catch (SQLException s){
-            print("Errore nell'inserimento del like.");
-        }
+        }catch (SQLException s){ s.printStackTrace();
+        print("Errore inserimento like.");}
     }
 
     public static void togliLike(int id){
@@ -253,6 +251,100 @@ public class Query {
             print("Errore nel togliere il like.");
         }
     }
+
+    public static List<Opera> getOpereCasuali() {
+        String query = "SELECT id, titolo, autore, visibilita, dati FROM opera ORDER BY RANDOM() LIMIT 4";
+        List<Opera> opere = new ArrayList<>();
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery()
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String titolo = rs.getString("titolo");
+                String autore = rs.getString("autore");
+                boolean visibilita = rs.getBoolean("visibilita");
+
+                byte[] blob = rs.getBytes("dati");
+                Image img = new Image(new ByteArrayInputStream(blob));
+
+                Opera opera = new Opera(img, titolo, autore, visibilita, id);
+                opere.add(opera);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return opere;
+    }
+
+    public static String contaFollower(String email) {
+        String query = "SELECT COUNT(*) FROM nelCuore WHERE utente2 = ?";
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return Integer.toString(rs.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            print("Errore nel contare i follower: " + e.getMessage());
+        }
+
+        return "0";
+    }
+
+    public static List<Utente> getFollower(String email) {
+        String query = "SELECT u.nome, u.cognome, u.nickname, u.email, u.foto, u.descrizione FROM nelCuore as nc JOIN utente as u ON nc.utente2 = u.email WHERE nc.utente1 = ?";
+
+        List<Utente> utenti = new ArrayList<>();
+
+        try (
+                Connection cn = Database.getConnection();
+                PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String nome = rs.getString("nome");
+                String cognome = rs.getString("cognome");
+                String nickname = rs.getString("nickname");
+                String mail = rs.getString("email");
+                print("Aggiunto " + mail);
+                String descrizione = rs.getString("descrizione");
+
+                byte[] blob = rs.getBytes("foto");
+                Image foto;
+
+                if (blob != null) {
+                    foto = new Image(new ByteArrayInputStream(blob));
+                } else {
+                    foto = new Image(Objects.requireNonNull(
+                            Query.class.getResource("/icone/artist.png")
+                    ).toExternalForm());
+                }
+
+                Utente temp = new Utente(nome, cognome, nickname, mail, foto, descrizione);
+                utenti.add(temp);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return utenti;
+    }
+
 
 
     public static byte[] imageToBytes(Image image) throws IOException {

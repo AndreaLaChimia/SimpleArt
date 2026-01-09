@@ -1,5 +1,6 @@
 package org.example.simpleart.controller;
 
+import org.example.simpleart.model.Query;
 import org.example.simpleart.model.currentUser;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import javafx.fxml.FXML;

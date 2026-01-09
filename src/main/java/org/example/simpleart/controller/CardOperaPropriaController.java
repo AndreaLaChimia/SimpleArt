@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.example.simpleart.model.Opera;
+import org.example.simpleart.model.Query;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -36,7 +37,7 @@ public class CardOperaPropriaController{
     private Label numeroLike;
 
     @FXML
-    private ImageView occhioImg, buttonLikeImg;
+    private ImageView occhioImg, imgLike;
 
     @FXML
     private Label titoloOpera;
@@ -58,11 +59,11 @@ public class CardOperaPropriaController{
     public void mettiLike(MouseEvent event) throws SQLException {
         if(!Query.verificaSeLikeGiaPresente(idOpera)) {
             Query.mettiLike(idOpera);
-            buttonLikeImg.setImage(like);
+            imgLike.setImage(like);
         }
         else {
             Query.togliLike(idOpera);
-            buttonLikeImg.setImage(likeEmpty);
+            imgLike.setImage(likeEmpty);
         }
 
         numeroLike.setText(String.valueOf(Query.contaLike(idOpera)));
@@ -115,7 +116,7 @@ public class CardOperaPropriaController{
         numeroLike.setText(String.valueOf(Query.contaLike(opera.getId())));
         idOpera = opera.getId();
         if(!Query.verificaSeLikeGiaPresente(idOpera)){
-            buttonLikeImg.setImage(likeEmpty);
+            imgLike.setImage(likeEmpty);
         }
     }
 

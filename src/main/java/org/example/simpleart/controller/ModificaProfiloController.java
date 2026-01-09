@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import org.example.simpleart.model.Query;
 import org.example.simpleart.model.SceneHandler;
 import org.example.simpleart.model.currentUser;
 

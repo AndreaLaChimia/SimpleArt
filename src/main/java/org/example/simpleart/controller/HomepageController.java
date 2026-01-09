@@ -6,15 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import org.example.simpleart.model.*;
-import org.example.simpleart.model.Print;
+
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
 
 import static org.example.simpleart.model.Print.print;
 
@@ -40,24 +39,12 @@ public class HomepageController{
     public void initialize() throws IOException {
         SceneHandler.getInstance().getStage().setTitle("SimpleArt-Homepage");
         stringaCiao.setText("Ciao " + currentUser.getNickname());
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icone/gioconda.png")));
-        Opera opera = new Opera(img, "La Gioconda", "Leonardo Da Vinci", true);
-        riempiGalleria(opera);
 
-        Image img2 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Woman.png")).toExternalForm());
-        Opera opera2 = new Opera(img2, "La donna", "Andrea La Chimia", true);
-        riempiGalleria(opera2);
-
-        Image img3 = new Image(Objects.requireNonNull(getClass().getResource("/opere/Rabbia.png")).toExternalForm());
-        Opera opera3 = new Opera(img3, "Rabbia", "Andrea La Chimia", true);
-        riempiGalleria(opera3);
-
-        Image img4 = new Image(Objects.requireNonNull(getClass().getResource("/opere/FruitsAndVegetable.png")).toExternalForm());
-        Opera opera4 = new Opera(img4, "Frutta e verdura", "Andrea La Chimia", true);
-        riempiGalleria(opera4);
-
-
-
+        List<Opera> opereCasuali = Query.getOpereCasuali();
+        for (Opera opera : opereCasuali) {
+            print("Id dell'opera caricata in homepage: " + String.valueOf(opera.getId()));
+            riempiGalleria(opera);
+        }
     }
 
     @FXML
@@ -97,8 +84,9 @@ public class HomepageController{
     }
 
     @FXML
-    public void logOut(MouseEvent e){
-        print("Tentativo di logout.");
+    public void logOut(MouseEvent e) throws IOException {
+        currentUser.clean();
+        SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 
 }

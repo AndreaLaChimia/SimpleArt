@@ -2,8 +2,6 @@ package org.example.simpleart.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -17,11 +15,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.layout.StackPane;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.example.simpleart.model.*;
 
@@ -29,7 +25,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.security.spec.ECField;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;

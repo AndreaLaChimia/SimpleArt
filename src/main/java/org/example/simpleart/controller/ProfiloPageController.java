@@ -97,8 +97,8 @@ public class ProfiloPageController{
     }
 
     @FXML
-    void goToNelCuore(MouseEvent event) {
-        print("Pulsante lista 'Nel cuore' schiacciato.");
+    void goToNelCuore(MouseEvent event) throws IOException {
+        SceneHandler.getInstance().sceneLoader("NelCuore.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML

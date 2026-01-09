@@ -12,16 +12,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import org.example.simpleart.model.Opera;
-import org.example.simpleart.model.Query;
-import org.example.simpleart.model.SceneHandler;
-import org.example.simpleart.model.currentUser;
+import org.example.simpleart.model.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
-public class GalleriaController{
+import static org.example.simpleart.model.Print.print;
+
+public class NelCuoreController{
+
+    @FXML
+    private ImageView backButton;
 
     @FXML
     private TextField barraDiRicerca;
@@ -33,13 +35,10 @@ public class GalleriaController{
     private ImageView doorImgButton;
 
     @FXML
-    private Button exitButton, testButton;
+    private Button exitButton;
 
     @FXML
-    private ScrollPane scrollOpere;
-
-    @FXML
-    private Label galleriaLabel;
+    private FlowPane flowOpere;
 
     @FXML
     private Label homeButton;
@@ -48,14 +47,22 @@ public class GalleriaController{
     private ImageView homeImgButton;
 
     @FXML
+    private Label nelCuoreLabel;
+
+    @FXML
     private BorderPane root;
 
     @FXML
-    private FlowPane flowOpere;
+    private ScrollPane scrollOpere;
 
     public void initialize() throws SQLException, IOException {
-        galleriaLabel.setText("La galleria di " + currentUser.getNickname());
-        caricaOpere();
+        print("nell'initialize di nelcuorecontroller.");
+        caricaUtenti();
+    }
+
+    @FXML
+    public void backToProfile(MouseEvent e) throws IOException {
+        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
     }
 
     @FXML
@@ -74,27 +81,26 @@ public class GalleriaController{
     }
 
     @FXML
-    void logOut(MouseEvent event) throws IOException {
+    public void logOut(MouseEvent e) throws IOException {
         currentUser.clean();
         SceneHandler.getInstance().sceneLoader("LoginPage.fxml", root.getWidth(), root.getHeight());
     }
 
-    public void caricaOpere() throws SQLException, IOException {
+    public void caricaUtenti() throws SQLException, IOException {
         flowOpere.getChildren().clear();
-        ArrayList<Opera> opere = Query.getAllArtOfAnArtist(currentUser.getEmail());
-        for(Opera i : opere) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/simpleart/CardOperaPropria.fxml"));
+        List<Utente> utenti = Query.getFollower(currentUser.getEmail());
+        if (utenti.isEmpty())
+            print("Lista vuota.");
+        for(Utente i : utenti) {
+            print("Entrati nel caricaOpere di utenti nel cuore.");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/simpleart/CardUtente.fxml"));
             Parent card = loader.load();
 
-            CardOperaPropriaController controller = loader.getController();
+            CardUtenteController controller = loader.getController();
 
-            controller.setOpera(i);
+            controller.setUtente(i);
             flowOpere.getChildren().add(card);
         }
     }
 
-    @FXML
-    public void backToProfile(MouseEvent e) throws IOException {
-        SceneHandler.getInstance().sceneLoader("ProfiloPage.fxml", root.getWidth(), root.getHeight());
-    }
 }

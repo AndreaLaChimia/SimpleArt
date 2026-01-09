@@ -12,4 +12,5 @@ module org.example.simpleart {
     exports org.example.simpleart.controller;
     exports org.example.simpleart.model;
     opens org.example.simpleart.controller to javafx.fxml;
+    opens org.example.simpleart.model to javafx.fxml;
 }

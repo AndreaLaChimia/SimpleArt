@@ -35,7 +35,7 @@
    <HBox nodeOrientation="RIGHT_TO_LEFT">
       <children>
       
-         <Button fx:id="bottoneLike" onMouseClicked="#cliccatoMiPiace" style="-fx-background-color: white;" text="Like">
+         <Button fx:id="numeroLike" onMouseClicked="#cliccatoMiPiace" style="-fx-background-color: white;" text="Like">
             <graphic>
                <ImageView fx:id="imgLike" fitWidth="16" preserveRatio="true">
                   <image>

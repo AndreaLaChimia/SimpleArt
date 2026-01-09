@@ -53,7 +53,7 @@
          </Button>
          <Label fx:id="numeroLike" onMouseClicked="#mettiLike" nodeOrientation="RIGHT_TO_LEFT" text="n.Like">
             <graphic>
-               <ImageView fx:id="buttonLikeImg" onMouseClicked="#mettiLike" fitHeight="22.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fx:id="imgLike" onMouseClicked="#mettiLike" fitHeight="22.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@../../../icone/like.png" />
                   </image>

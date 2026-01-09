@@ -7,7 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.example.simpleart.model.Opera;
+import org.example.simpleart.model.Query;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 import static org.example.simpleart.model.Print.print;
@@ -21,10 +23,15 @@ public class CardOperaController{
     private Label autoreStringa, titoloOpera;
 
     @FXML
-    private Button bottoneLike;
+    private Button numeroLike;
 
-    boolean miPiaceMesso = false;
-    boolean cuorePieno = false;
+    private Image like = new Image(Objects.requireNonNull(getClass().getResource("/icone/like.png")).toExternalForm());
+    private Image likeEmpty = new Image(Objects.requireNonNull(getClass().getResource("/icone/like empty.png")).toExternalForm());
+    private Image cuore = new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart full.png")).toExternalForm());
+    private Image cuoreVuoto = new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart empty.png")).toExternalForm());
+
+    int idOpera;
+
 
     public void initialize(){
     }
@@ -33,19 +40,26 @@ public class CardOperaController{
         fotoCard.setImage(opera.getImg());
         titoloOpera.setText(opera.getTitolo());
         autoreStringa.setText(opera.getAutore());
+        if(Query.verificaSeLikeGiaPresente(idOpera)){
+            imgLike.setImage(likeEmpty);
+        }
+        else imgLike.setImage(like);
+        idOpera = opera.getId();
+        numeroLike.setText(String.valueOf(Query.contaLike(idOpera)));
+
     }
 
-    public void cliccatoMiPiace(MouseEvent e){
-        if(!miPiaceMesso) {
-            miPiaceMesso = true;
-            imgLike.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Like.png")).toExternalForm()));
-            bottoneLike.setText(String.valueOf(Integer.parseInt(bottoneLike.getText()) + 1));
+    public void cliccatoMiPiace(MouseEvent e) throws SQLException {
+        if(!Query.verificaSeLikeGiaPresente(idOpera)) {
+            Query.mettiLike(idOpera);
+            imgLike.setImage(like);
         }
         else {
-            miPiaceMesso = false;
-            imgLike.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Like empty.png")).toExternalForm()));
-            bottoneLike.setText(String.valueOf(Integer.parseInt(bottoneLike.getText()) - 1));
+            Query.togliLike(idOpera);
+            imgLike.setImage(likeEmpty);
         }
+
+        numeroLike.setText(String.valueOf(Query.contaLike(idOpera)));
     }
 
     public void cliccatoNome(MouseEvent e){
@@ -53,16 +67,5 @@ public class CardOperaController{
     }
 
     public void cliccatoCuore(MouseEvent e){
-        print("Hai cliccato il cuore");
-        if(cuorePieno){
-            cuoreIcona.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart empty.png")).toExternalForm()));
-            cuorePieno = false;
-        }
-        else{
-            cuoreIcona.setImage(new Image(Objects.requireNonNull(getClass().getResource("/icone/Heart full.png")).toExternalForm()));
-            cuorePieno = true;
-        }
-
-
     }
 }
